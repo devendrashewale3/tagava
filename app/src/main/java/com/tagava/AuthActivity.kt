@@ -1,5 +1,6 @@
 package com.tagava
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,11 @@ class AuthActivity : DaggerActivity() {
 
        Log.d(TAG,"--" + testStr +" --"+ app)
         setLogo()
+
+        login_button.setOnClickListener {
+            var intent = Intent(this@AuthActivity, OTPActivity::class.java);
+            startActivity(intent)
+        }
     }
 
     fun setLogo(){

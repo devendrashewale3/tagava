@@ -3,6 +3,8 @@
 buildscript {
     ext.kotlin_version = '1.3.71'
     ext.dagger2_version = '2.24'
+    ext.retrofit_version = '2.6.1'
+    ext.lifecycle_version = '2.1.0'
     repositories {
         google()
         jcenter()
@@ -21,7 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url 'https://jitpack.io' }
     }
 }
 
