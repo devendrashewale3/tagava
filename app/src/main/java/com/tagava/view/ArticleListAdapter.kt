@@ -44,8 +44,8 @@ class ArticleListAdapter(var context: Context) :
 
     class ViewHolder(val binding: ArticleListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Any) {
-           // binding.setVariable(BR.articlemodel, article)
-           // binding.executePendingBindings()
+            binding.setVariable(BR.articlemodel, article)
+            binding.executePendingBindings()
         }
 
     }
