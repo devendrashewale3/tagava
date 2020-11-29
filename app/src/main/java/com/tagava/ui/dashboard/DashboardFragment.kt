@@ -18,7 +18,15 @@ class DashboardFragment : Fragment() {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: Recycler_View_Adapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
+        val data: ArrayList<Data>? = fill_with_data()
+
+        data?.let {
+            adapter = Recycler_View_Adapter(data)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,17 +36,9 @@ class DashboardFragment : Fragment() {
         dashboardViewModel =
             ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         val root = inflater.inflate(R.layout.activity_main, container, false)
-//        val textView: TextView = root.findViewById(R.id.text_dashboard)
-//        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-//            textView.text = it
-//        })
 
 
-        val data: ArrayList<Data>? = fill_with_data()
 
-        data?.let {
-            adapter = Recycler_View_Adapter(data)
-        }
         layoutManager = LinearLayoutManager(activity)
         recyclerview?.layoutManager =layoutManager
         recyclerview?.adapter = adapter

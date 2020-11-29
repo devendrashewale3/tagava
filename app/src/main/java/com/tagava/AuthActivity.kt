@@ -36,11 +36,16 @@ class AuthActivity : DaggerActivity() {
             var intent = Intent(this@AuthActivity, OTPActivity::class.java);
             startActivity(intent)
         }
+
+        register_textView.setOnClickListener {
+            var intent = Intent(this@AuthActivity, RegisterActivity::class.java);
+            startActivity(intent)
+        }
     }
 
     fun setLogo(){
         requestManager
             .load(logo)
-            .into(login_logo)
+            .into(login_title)
     }
 }
