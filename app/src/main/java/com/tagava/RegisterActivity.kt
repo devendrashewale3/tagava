@@ -10,7 +10,11 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.title = "Register"
         setContentView(R.layout.activity_login)
+
+
 
         register_button.setOnClickListener {
             var intent = Intent(this@RegisterActivity, OTPActivity::class.java);
