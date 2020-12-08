@@ -11,4 +11,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_addcustomer">Add Customer</string>
     <string name="register">Register</string>
+    <string name="invalid_nmuber">Please enter valid mobile number.</string>
 </resources>

@@ -5,6 +5,7 @@ package com.tagava.repository
  */
 class BaseURL {
     companion object {
-        const val BASE_URL = "https://5e99a9b1bc561b0016af3540.mockapi.io/"
+        const val BASE_URL =
+            "http://ec2-3-6-140-92.ap-south-1.compute.amazonaws.com:8081/api-gateway/"
     }
 }

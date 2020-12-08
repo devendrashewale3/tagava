@@ -1,48 +1,93 @@
 package com.tagava.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-//import com.tagava.App
-import com.tagava.data.Article
-import com.tagava.di.APIComponent
-
+import com.google.gson.GsonBuilder
+import com.tagava.data.LoginRequest
+import com.tagava.data.LoginResponse
+import com.tagava.data.VerifyOTP
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import javax.inject.Inject
+import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.String
 
 class RetrofitRepository {
-    var TAG = "RetrofitRepository"
-    lateinit var apiComponent: APIComponent
+    private val apiService: APIService
+    var retrofit: Retrofit? = null
 
-    var articleMutableList: MutableLiveData<Article> = MutableLiveData()
-
-    @Inject
-    lateinit var retrofit: Retrofit
 
     init {
-//        var apiComponent: APIComponent = App.apiComponent
-//        apiComponent.inject(this)
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+        retrofit = Retrofit.Builder()
+            .baseUrl(BaseURL.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        apiService = retrofit?.create(APIService::class.java)!!
+
     }
 
-    fun fetchArticleList(): LiveData<Article> {
+    fun getOTP(request: LoginRequest, iapiCallback: IAPICallback<*, *>) {
 
-        var apiService: APIService = retrofit.create(APIService::class.java)
-        var articleList: Call<Article> = apiService.fetchArticles(1)
-        articleList.enqueue(object : Callback<Article> {
-            override fun onFailure(call: Call<Article>, t: Throwable) {
-                Log.d(TAG, "error " + t.message)
+        val call: Call<LoginResponse> = apiService.fetchOTP(request)
+        call.enqueue(object : Callback<LoginResponse?> {
+            override fun onResponse(
+                call: Call<LoginResponse?>,
+                response: Response<LoginResponse?>
+            ) {
+                if (response.isSuccessful()) {
+                    val loginResponse: LoginResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.data?.get(0)?.otp)
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure("error")
+                }
             }
 
-            override fun onResponse(call: Call<Article>, response: Response<Article>) {
-                var articleList = response.body()
-                articleMutableList.value = articleList
+            override fun onFailure(
+                call: Call<LoginResponse?>,
+                t: Throwable
+            ) {
+                iapiCallback.onResponseFailure("error")
             }
         })
+    }
 
-        return articleMutableList
+
+    fun verifyOTP(request: VerifyOTP, iapiCallback: IAPICallback<*, *>) {
+
+        val call: Call<LoginResponse> = apiService.validateOTP(request)
+        call.enqueue(object : Callback<LoginResponse?> {
+            override fun onResponse(
+                call: Call<LoginResponse?>,
+                response: Response<LoginResponse?>
+            ) {
+                if (response.isSuccessful()) {
+                    val loginResponse: LoginResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.data?.get(0)?.otp)
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure("error")
+                }
+            }
+
+            override fun onFailure(
+                call: Call<LoginResponse?>,
+                t: Throwable
+            ) {
+                iapiCallback.onResponseFailure("error")
+            }
+        })
     }
 
 }
