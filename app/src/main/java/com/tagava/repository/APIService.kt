@@ -1,9 +1,6 @@
 package com.tagava.repository
 
-import com.tagava.data.Article
-import com.tagava.data.LoginRequest
-import com.tagava.data.LoginResponse
-import com.tagava.data.VerifyOTP
+import com.tagava.data.*
 
 import retrofit2.Call
 import retrofit2.http.*
@@ -26,5 +23,15 @@ interface APIService {
     )
     @POST("signUp/validateOtp")
     fun validateOTP(@Body request1: VerifyOTP): Call<LoginResponse>
+
+    @Headers(
+        value = ["Accept: application/json",
+            "Content-type:application/json"]
+    )
+    @POST("signUp/register")
+    fun registerUser(
+        @Header("Authorization") authHeader: String,
+        @Body request1: RegisterRequest
+    ): Call<LoginResponse>
 
 }

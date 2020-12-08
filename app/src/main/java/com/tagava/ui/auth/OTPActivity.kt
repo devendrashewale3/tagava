@@ -2,6 +2,7 @@ package com.tagava.ui.auth
 
 import `in`.aabhasjindal.otptextview.OTPListener
 import `in`.aabhasjindal.otptextview.OtpTextView
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -35,8 +36,6 @@ class OTPActivity : AppCompatActivity() {
             override fun onOTPComplete(otp: String) {
                 //  Toast.makeText(this@OTPActivity, "The OTP is " + otp,  Toast.LENGTH_SHORT).show();
                 authViewModel.otpText?.set(otp)
-
-
             }
         }
 
@@ -55,6 +54,13 @@ class OTPActivity : AppCompatActivity() {
 
         authViewModel?.progressDialog?.observe(this, Observer {
             if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
+        })
+
+        authViewModel.verifyOTPStatusLiveData.observe(this, Observer {
+            if (it) {
+                var intent = Intent(this@OTPActivity, RegisterActivity::class.java);
+                startActivity(intent)
+            }
         })
 
     }

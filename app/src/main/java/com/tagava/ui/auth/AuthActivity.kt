@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.tagava.R
-import com.tagava.RegisterActivity
 import com.tagava.databinding.ActivityAuthBinding
 import com.tagava.util.CustomeProgressDialog
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -52,7 +51,7 @@ class AuthActivity : AppCompatActivity() {
 
         authViewModel.loginDataLiveData.observe(this, Observer {
             Toast.makeText(this@AuthActivity, "The OTP is " + it, Toast.LENGTH_SHORT).show();
-            if (it == "success") {
+            if (it) {
                 var intent = Intent(this@AuthActivity, OTPActivity::class.java);
                 startActivity(intent)
             }
