@@ -3,8 +3,8 @@ package com.tagava.ui.auth
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tagava.data.LoginResponse
 import com.tagava.data.RegisterRequest
+import com.tagava.data.RegisterResponse
 import com.tagava.repository.IAPICallback
 import com.tagava.repository.RetrofitRepository
 import com.tagava.util.SingleLiveEvent
@@ -43,11 +43,10 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 override fun onResponseSuccess(responseData: Any?) {
 
                     progressDialog?.value = false
-                    var response: LoginResponse? = responseData as LoginResponse
+                    var response: RegisterResponse? = responseData as RegisterResponse
 
                     response.let {
                         //  authTokenDataLiveData.value = response?.data?.get(0)?.token
-
                         registrationStatusLiveData.value = true
                     }
                 }

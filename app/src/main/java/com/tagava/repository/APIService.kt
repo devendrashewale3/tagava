@@ -24,14 +24,11 @@ interface APIService {
     @POST("signUp/validateOtp")
     fun validateOTP(@Body request1: VerifyOTP): Call<LoginResponse>
 
-    @Headers(
-        value = ["Accept: application/json",
-            "Content-type:application/json"]
-    )
+
     @POST("signUp/register")
     fun registerUser(
-        @Header("Authorization") authHeader: String,
+        @HeaderMap authHeader: Map<String, String>,
         @Body request1: RegisterRequest
-    ): Call<LoginResponse>
+    ): Call<RegisterResponse>
 
 }

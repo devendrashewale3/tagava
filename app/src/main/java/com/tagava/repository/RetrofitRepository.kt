@@ -2,10 +2,7 @@ package com.tagava.repository
 
 import android.util.Log
 import com.google.gson.GsonBuilder
-import com.tagava.data.LoginRequest
-import com.tagava.data.LoginResponse
-import com.tagava.data.RegisterRequest
-import com.tagava.data.VerifyOTP
+import com.tagava.data.*
 import com.tagava.ui.auth.AuthViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -94,18 +91,30 @@ class RetrofitRepository {
 
     fun registerUser(request: RegisterRequest, iapiCallback: IAPICallback<*, *>) {
 
-        var token = AuthViewModel.authTokenDataLiveData.value.toString()
-        val call: Call<LoginResponse> = apiService.registerUser(token, request)
-        call.enqueue(object : Callback<LoginResponse?> {
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<RegisterResponse> = apiService.registerUser(headerMap, request)
+        call.enqueue(object : Callback<RegisterResponse?> {
+            override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
+                iapiCallback.onResponseFailure("error")
+            }
+
             override fun onResponse(
-                call: Call<LoginResponse?>,
-                response: Response<LoginResponse?>
+                call: Call<RegisterResponse?>,
+                response: Response<RegisterResponse?>
             ) {
+
+
                 if (response.isSuccessful()) {
-                    val loginResponse: LoginResponse? = response.body()
+                    val loginResponse: RegisterResponse? = response.body()
                     Log.d(
                         "Response",
-                        String.valueOf(loginResponse?.data?.get(0)?.otp)
+                        String.valueOf(loginResponse?.toString())
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
@@ -114,12 +123,6 @@ class RetrofitRepository {
                 }
             }
 
-            override fun onFailure(
-                call: Call<LoginResponse?>,
-                t: Throwable
-            ) {
-                iapiCallback.onResponseFailure("error")
-            }
         })
     }
 
