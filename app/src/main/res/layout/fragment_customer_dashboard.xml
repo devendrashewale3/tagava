@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,17 +93,6 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginTop="60dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="19sp"
-                android:textColor="#364BC5"
-                android:text="VIEW REPORT >"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -127,51 +114,128 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            app:defaultQueryHint="6 customers"
-            app:queryHint="6 customers"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/filterIcon"
-            android:layout_height="40dp"
-            android:layout_width="40dp"
-            android:padding="5dp"
-            android:src="@drawable/filter"
-            app:layout_constraintEnd_toStartOf="@+id/pdfIcon"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/pdfIcon"
-            android:layout_height="40dp"
             android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="52dp"
             android:padding="5dp"
             android:src="@drawable/ic_pdf"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/pdfTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Report"
+            app:layout_constraintEnd_toEndOf="@+id/pdfIcon"
+            app:layout_constraintStart_toStartOf="@+id/pdfIcon"
+            app:layout_constraintTop_toBottomOf="@+id/pdfIcon" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/whatsIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="64dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_whatsapp"
+            app:layout_constraintStart_toEndOf="@+id/pdfIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/whatsappTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Reminders"
+            app:layout_constraintEnd_toEndOf="@+id/whatsIcon"
+            app:layout_constraintStart_toStartOf="@id/whatsIcon"
+            app:layout_constraintTop_toBottomOf="@id/whatsIcon" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/smsIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="64dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_sms"
+            app:layout_constraintStart_toEndOf="@+id/whatsIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/smsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="SMS"
+            app:layout_constraintEnd_toEndOf="@+id/smsIcon"
+            app:layout_constraintStart_toStartOf="@id/smsIcon"
+            app:layout_constraintTop_toBottomOf="@id/smsIcon" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/recyclerCustomerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_button"
         app:layout_constraintCircleRadius="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerCustomerView"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnMakePayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="make payment "
+            android:background="#F60534"
+            android:textColor="@color/white"
+            android:padding="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/appCompatButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/appCompatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:text="receive payment "
+            android:background="#2EB975"
+            android:textColor="@color/white"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnMakePayment"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 

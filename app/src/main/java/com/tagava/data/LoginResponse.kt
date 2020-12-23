@@ -5,6 +5,6 @@ package com.tagava.data
  */
 data class LoginResponse(
     val `data`: List<Data>,
-    val error: List<Any>,
+    val error: List<ErrorData>,
     val status: String
 )

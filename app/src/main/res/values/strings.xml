@@ -12,4 +12,5 @@
     <string name="title_addcustomer">Add Customer</string>
     <string name="register">Register</string>
     <string name="invalid_nmuber">Please enter valid mobile number.</string>
+    <string name="title_customer_dashboard">Customer Dashboard</string>
 </resources>

@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical">
 
 
@@ -21,25 +25,6 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp">
 
-            <FrameLayout
-                android:id="@+id/initialsLayout"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp">
-
-                <TextView
-                    android:id="@+id/placeholder"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:background="@drawable/circle"
-                    android:textColor="#fff"/>
-
-
-            </FrameLayout>
 
             <TextView
                 android:id="@+id/title"
@@ -65,14 +50,7 @@
                 android:layout_alignParentRight="true"
                 android:text="Rs 2000"
                 android:textSize="16sp" />
-            <TextView
-                android:id="@+id/amountDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/amount"
-                android:text="You will get"
-                android:textSize="16sp" />
+
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>

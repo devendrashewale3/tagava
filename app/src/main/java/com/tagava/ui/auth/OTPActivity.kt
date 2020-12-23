@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.tagava.DashboardActivity
 import com.tagava.R
 import com.tagava.databinding.ActivityOtpBinding
 import com.tagava.util.CustomeProgressDialog
@@ -59,6 +60,13 @@ class OTPActivity : AppCompatActivity() {
         authViewModel.verifyOTPStatusLiveData.observe(this, Observer {
             if (it) {
                 var intent = Intent(this@OTPActivity, RegisterActivity::class.java);
+                startActivity(intent)
+            }
+        })
+
+        authViewModel.verifyLoginOTPStatusLiveData.observe(this, Observer {
+            if (it) {
+                var intent = Intent(this@OTPActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }
         })

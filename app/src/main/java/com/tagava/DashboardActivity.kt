@@ -2,6 +2,7 @@ package com.tagava
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
 import androidx.navigation.findNavController
@@ -27,7 +28,17 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_addcustomer
             )
         )
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.navigation_customer_dashboard ->
+                    navView.visibility = View.GONE
+                else -> navView.visibility = View.VISIBLE
+
+            }
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 }

@@ -1,55 +1,48 @@
 package com.tagava
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import java.util.*
-import kotlin.collections.ArrayList
 
 
-class Recycler_View_Adapter(
+class Recycler_CustomerView_Adapter(
     list: ArrayList<Data>
 ) :
-    RecyclerView.Adapter<View_Holder>() {
+    RecyclerView.Adapter<CustomerView_Holder>() {
     var list = ArrayList<Data>()
 
     init {
         this.list = list
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): View_Holder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerView_Holder {
         val v: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent, false)
-        return View_Holder(v)
+            LayoutInflater.from(parent.context).inflate(R.layout.row_customer_layout, parent, false)
+        return CustomerView_Holder(v)
     }
 
-    override fun onBindViewHolder(holder: View_Holder, position: Int) {
+    override fun onBindViewHolder(holder: CustomerView_Holder, position: Int) {
         holder.title.setText(list[position].title)
         holder.description.setText(list[position].description)
-        holder.placeholder.text = list[position].initials
+        //   holder.placeholder.text = list[position].initials
         holder.amountTextView.text = list[position].amount
-        holder.amountDescTextView.text = list[position].amountDes
-
         if (list[position].returnBack)
             holder.amountTextView.setTextColor(Color.RED)
         else
             holder.amountTextView.setTextColor(Color.GREEN)
 
-        var drawable: GradientDrawable = holder.placeholder.background as GradientDrawable
-        var color =
-            (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
-        drawable.setColor(color)
+//        var drawable: GradientDrawable = holder.placeholder.background as GradientDrawable
+//        var color =
+//            (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
+//        drawable.setColor(color)
         animate(holder)
-        holder.itemView.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.navigation_customer_dashboard)
-        )
+//        holder.itemView.setOnClickListener(
+//            Navigation.createNavigateOnClickListener(R.id.navigation_customer_dashboard)
+//        )
     }
 
     override fun getItemCount(): Int {
@@ -73,7 +66,7 @@ class Recycler_View_Adapter(
         notifyItemRemoved(position)
     }
 
-    fun animate(viewHolder: ViewHolder) {
+    fun animate(viewHolder: CustomerView_Holder) {
         val animAnticipateOvershoot: Animation = AnimationUtils.loadAnimation(
             viewHolder.itemView.context,
             R.anim.anticipate_overshoot_interpolator

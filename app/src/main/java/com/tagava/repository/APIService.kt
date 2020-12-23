@@ -17,6 +17,10 @@ interface APIService {
     @POST("signUp/otp")
     fun fetchOTP(@Body request1: LoginRequest): Call<LoginResponse>
 
+    @POST("login/otp")
+    fun fetchLoginOTP(@Body request1: LoginRequest): Call<LoginResponse>
+
+
     @Headers(
         value = ["Accept: application/json",
             "Content-type:application/json"]
@@ -24,11 +28,20 @@ interface APIService {
     @POST("signUp/validateOtp")
     fun validateOTP(@Body request1: VerifyOTP): Call<LoginResponse>
 
+    @POST("login/validateOtp")
+    fun validateLoginOTP(@Body request1: VerifyOTP): Call<LoginResponse>
+
 
     @POST("signUp/register")
     fun registerUser(
         @HeaderMap authHeader: Map<String, String>,
         @Body request1: RegisterRequest
+    ): Call<RegisterResponse>
+
+    @POST("customer/create")
+    fun addCustomerAPI(
+        @HeaderMap headerMap: HashMap<String, String>,
+        @Body request: AddCustomerRequest
     ): Call<RegisterResponse>
 
 }

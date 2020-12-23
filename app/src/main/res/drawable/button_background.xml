@@ -1,6 +1,11 @@
 <?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@android:color/darker_gray" />
     <corners android:radius="5dp" />
+    <gradient
+        android:angle="45"
+        android:endColor="#1685e6"
+        android:centerColor="#409ff0"
+        android:startColor="#53a5ec"
+        android:type="linear" />
 </shape>

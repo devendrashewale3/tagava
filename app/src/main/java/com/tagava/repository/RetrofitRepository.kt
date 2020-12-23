@@ -1,7 +1,9 @@
 package com.tagava.repository
 
 import android.util.Log
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.tagava.data.*
 import com.tagava.ui.auth.AuthViewModel
 import retrofit2.Call
@@ -44,8 +46,12 @@ class RetrofitRepository {
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginResponse>() {}.type
+                    var errorResponse: LoginResponse? =
+                        gson.fromJson(response.errorBody()!!.charStream(), type)
                     Log.e("error ", response.errorBody().toString())
-                    iapiCallback.onResponseFailure("error")
+                    iapiCallback.onResponseFailure(errorResponse?.error?.get(0))
                 }
             }
 
@@ -53,15 +59,16 @@ class RetrofitRepository {
                 call: Call<LoginResponse?>,
                 t: Throwable
             ) {
-                iapiCallback.onResponseFailure("error")
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
             }
         })
     }
 
 
-    fun verifyOTP(request: VerifyOTP, iapiCallback: IAPICallback<*, *>) {
+    fun getLoginOTP(request: LoginRequest, iapiCallback: IAPICallback<*, *>) {
 
-        val call: Call<LoginResponse> = apiService.validateOTP(request)
+        val call: Call<LoginResponse> = apiService.fetchLoginOTP(request)
         call.enqueue(object : Callback<LoginResponse?> {
             override fun onResponse(
                 call: Call<LoginResponse?>,
@@ -75,8 +82,12 @@ class RetrofitRepository {
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginResponse>() {}.type
+                    var errorResponse: LoginResponse? =
+                        gson.fromJson(response.errorBody()!!.charStream(), type)
                     Log.e("error ", response.errorBody().toString())
-                    iapiCallback.onResponseFailure("error")
+                    iapiCallback.onResponseFailure(errorResponse?.error?.get(0))
                 }
             }
 
@@ -84,7 +95,49 @@ class RetrofitRepository {
                 call: Call<LoginResponse?>,
                 t: Throwable
             ) {
-                iapiCallback.onResponseFailure("error")
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+        })
+    }
+
+
+    fun verifyOTP(isUserRegistered: Boolean, request: VerifyOTP, iapiCallback: IAPICallback<*, *>) {
+
+        val call: Call<LoginResponse> by lazy {
+            if (isUserRegistered)
+                apiService.validateOTP(request)
+            else
+                apiService.validateLoginOTP(request)
+        }
+        call.enqueue(object : Callback<LoginResponse?> {
+            override fun onResponse(
+                call: Call<LoginResponse?>,
+                response: Response<LoginResponse?>
+            ) {
+                if (response.isSuccessful()) {
+                    val loginResponse: LoginResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.data?.get(0)?.otp)
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginResponse>() {}.type
+                    var errorResponse: LoginResponse? =
+                        gson.fromJson(response.errorBody()!!.charStream(), type)
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure(errorResponse?.error?.get(0))
+                }
+            }
+
+            override fun onFailure(
+                call: Call<LoginResponse?>,
+                t: Throwable
+            ) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
             }
         })
     }
@@ -101,7 +154,8 @@ class RetrofitRepository {
         val call: Call<RegisterResponse> = apiService.registerUser(headerMap, request)
         call.enqueue(object : Callback<RegisterResponse?> {
             override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
-                iapiCallback.onResponseFailure("error")
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
             }
 
             override fun onResponse(
@@ -118,8 +172,52 @@ class RetrofitRepository {
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginResponse>() {}.type
+                    var errorResponse: LoginResponse? =
+                        gson.fromJson(response.errorBody()!!.charStream(), type)
                     Log.e("error ", response.errorBody().toString())
-                    iapiCallback.onResponseFailure("error")
+                    iapiCallback.onResponseFailure(errorResponse?.error?.get(0))
+                }
+            }
+
+        })
+    }
+
+    fun addCustomer(request: AddCustomerRequest, iapiCallback: IAPICallback<*, *>) {
+
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<RegisterResponse> = apiService.addCustomerAPI(headerMap, request)
+        call.enqueue(object : Callback<RegisterResponse?> {
+            override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                call: Call<RegisterResponse?>,
+                response: Response<RegisterResponse?>
+            ) {
+
+
+                if (response.isSuccessful()) {
+                    val loginResponse: RegisterResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    val loginResponse: RegisterResponse? = response.body()
+                    val addCustomerError = loginResponse?.error?.get(0)
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure(addCustomerError)
                 }
             }
 

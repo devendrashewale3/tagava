@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.Data
 import com.tagava.R
 import com.tagava.Recycler_View_Adapter
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_dashboard.view.*
+
 
 class DashboardFragment : Fragment() {
 
@@ -21,11 +21,7 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val data: ArrayList<Data>? = fill_with_data()
 
-        data?.let {
-            adapter = Recycler_View_Adapter(data)
-        }
     }
 
     override fun onCreateView(
@@ -33,15 +29,19 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.activity_main, container, false)
+//        dashboardViewModel =
+//            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
+        var data: ArrayList<Data>? = fill_with_data()
 
+        data?.let {
+            adapter = Recycler_View_Adapter(data)
+        }
 
         layoutManager = LinearLayoutManager(activity)
-        recyclerview?.layoutManager =layoutManager
-        recyclerview?.adapter = adapter
+        root.recyclerview?.layoutManager = layoutManager
+        root.recyclerview?.adapter = adapter
 
         return root
     }

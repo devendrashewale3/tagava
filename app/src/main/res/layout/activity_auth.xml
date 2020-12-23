@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:padding="15dp"
     android:background="#fff"
-    tools:context=".ui.auth.AuthActivity">
+    tools:context=".ui.auth.SplashActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +83,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:background="@drawable/button_background"
         android:id="@+id/login_button"
         android:layout_marginTop="15dp"

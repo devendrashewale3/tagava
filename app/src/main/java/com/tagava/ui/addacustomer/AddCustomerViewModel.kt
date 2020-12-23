@@ -1,46 +1,48 @@
-package com.tagava.ui.auth
+package com.tagava.ui.addacustomer
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tagava.data.AddCustomerRequest
 import com.tagava.data.ErrorData
-import com.tagava.data.RegisterRequest
 import com.tagava.data.RegisterResponse
 import com.tagava.repository.IAPICallback
 import com.tagava.repository.RetrofitRepository
 import com.tagava.util.SingleLiveEvent
 
-/**
- * Created by Devendra Shewale on 07/12/20.
- */
-class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
+class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
+
     var retrofitRepository: RetrofitRepository
-    var registrationStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    var addCustomerStausStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var progressDialog: SingleLiveEvent<Boolean>? = null
-    var businessName: ObservableField<String>? = null
-    var userName: ObservableField<String>? = null
-    var email: ObservableField<String>? = null
+    var customerName: ObservableField<String>? = null
+    var mobileNumber: ObservableField<String>? = null
 
 
     init {
         this.retrofitRepository = retrofitRepository
-        this.businessName = ObservableField("")
-        this.userName = ObservableField("")
-        this.email = ObservableField("")
+        this.customerName = ObservableField("")
+        this.mobileNumber = ObservableField("")
+
         this.progressDialog = SingleLiveEvent<Boolean>()
     }
 
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is notifications Fragment"
+    }
+    val text: LiveData<String> = _text
 
-    fun registerUser() {
+
+    fun addCustomer() {
         progressDialog?.value = true
-        var request = RegisterRequest(
-            this.businessName?.get().toString(),
-            this.email?.get().toString(),
-            this.userName?.get().toString()
+        var request = AddCustomerRequest(
+            this.mobileNumber?.get().toString(),
+            this.customerName?.get().toString()
         )
 
         if (request != null) {
-            this.retrofitRepository.registerUser(request, object : IAPICallback<Any?, ErrorData?> {
+            this.retrofitRepository.addCustomer(request, object : IAPICallback<Any?, ErrorData?> {
                 override fun onResponseSuccess(responseData: Any?) {
 
                     progressDialog?.value = false
@@ -48,17 +50,16 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                     response.let {
                         //  authTokenDataLiveData.value = response?.data?.get(0)?.token
-                        registrationStatusLiveData.value = true
+                        addCustomerStausStatusLiveData.value = true
                     }
                 }
 
                 override fun onResponseFailure(failureData: ErrorData?) {
                     progressDialog?.value = false
-                    registrationStatusLiveData.value = false
+                    addCustomerStausStatusLiveData.value = false
                 }
 
             })
         }
     }
-
 }

@@ -5,6 +5,6 @@ package com.tagava.data
  */
 data class RegisterResponse(
     val `data`: List<String>,
-    val error: List<Any>,
+    val error: List<ErrorData>,
     val status: String
 )

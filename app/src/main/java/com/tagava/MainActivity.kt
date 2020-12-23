@@ -97,8 +97,6 @@ class MainActivity : AppCompatActivity() {
                 false
             )
         )
-
-
         return data
     }
 }
