@@ -44,4 +44,10 @@ interface APIService {
         @Body request: AddCustomerRequest
     ): Call<RegisterResponse>
 
+    @POST("dashboard/business")
+    fun fetchDashboardDetailsAPI(
+        @HeaderMap headerMap: HashMap<String, String>,
+        @Body request: DashaboardDetailsRequest
+    ): Call<RegisterResponse>
+
 }

@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f772dc0b2b892dada8aef2578d40377/jetified-OtpView-v1.1.2-ktx/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f772dc0b2b892dada8aef2578d40377/jetified-OtpView-v1.1.2-ktx/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f772dc0b2b892dada8aef2578d40377/jetified-OtpView-v1.1.2-ktx/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

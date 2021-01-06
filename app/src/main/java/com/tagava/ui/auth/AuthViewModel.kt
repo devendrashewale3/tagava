@@ -37,6 +37,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
     companion object {
         var mobileNumberDataLiveData: MutableLiveData<String> = MutableLiveData()
+        var businessIDDataLiveData: MutableLiveData<String> = MutableLiveData()
         var authTokenDataLiveData: MutableLiveData<String> = MutableLiveData()
         var authMobileNumberDataLiveData: MutableLiveData<String> = MutableLiveData()
         var isUserRegistered: MutableLiveData<Boolean> = MutableLiveData()
@@ -45,7 +46,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     fun fetchLoginResponse() {
         progressDialog?.value = true
         var request = this.mobile_number?.get()?.let { LoginRequest(it) }
-
+        mobileNumberDataLiveData.value = request?.mobileNo
         if (request != null) {
             this.retrofitRepository.getLoginOTP(request, object : IAPICallback<Any?, ErrorData?> {
                 override fun onResponseSuccess(responseData: Any?) {
@@ -55,7 +56,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                     response.let {
                         loginDataLiveData.value = true
-                        mobileNumberDataLiveData.value = request.mobileNo
+
                         isUserRegistered.value = false
 
                     }
@@ -68,6 +69,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                     if (failureData?.code.equals("LG-INV-MB-002")) {
                         isUserRegistered.value = true
+                        fetchRegOTP(request)
                     } else {
 
                     }
@@ -75,6 +77,28 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
             })
         }
+    }
+
+    fun fetchRegOTP(request: LoginRequest) {
+        this.retrofitRepository.getOTP(request, object : IAPICallback<Any?, ErrorData?> {
+            override fun onResponseSuccess(responseData: Any?) {
+
+                progressDialog?.value = false
+                var response: LoginResponse? = responseData as LoginResponse
+
+                response.let {
+                    loginDataLiveData.value = true
+
+                }
+
+            }
+
+            override fun onResponseFailure(ffailureData: ErrorData?) {
+                progressDialog?.value = false
+                loginDataLiveData.value = false
+            }
+
+        })
     }
 
     fun fetchVerifyOTP() {

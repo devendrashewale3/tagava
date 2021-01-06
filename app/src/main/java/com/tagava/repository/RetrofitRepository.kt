@@ -224,4 +224,44 @@ class RetrofitRepository {
         })
     }
 
+    fun fetchDashboardDetails(request: DashaboardDetailsRequest, iapiCallback: IAPICallback<*, *>) {
+
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<RegisterResponse> = apiService.fetchDashboardDetailsAPI(headerMap, request)
+        call.enqueue(object : Callback<RegisterResponse?> {
+            override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                call: Call<RegisterResponse?>,
+                response: Response<RegisterResponse?>
+            ) {
+
+
+                if (response.isSuccessful()) {
+                    val loginResponse: RegisterResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    val loginResponse: RegisterResponse? = response.body()
+                    val addCustomerError = loginResponse?.error?.get(0)
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure(addCustomerError)
+                }
+            }
+
+        })
+    }
+
 }

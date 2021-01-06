@@ -149,7 +149,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="64dp"
             android:padding="5dp"
-            android:src="@drawable/ic_whatsapp"
+            android:src="@drawable/ic_reminders"
             app:layout_constraintStart_toEndOf="@+id/pdfIcon"
             app:layout_constraintTop_toTopOf="parent" />
 

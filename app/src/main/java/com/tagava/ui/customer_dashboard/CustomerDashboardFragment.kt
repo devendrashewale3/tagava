@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.Data
 import com.tagava.R
-import com.tagava.Recycler_CustomerView_Adapter
 import com.tagava.ui.dashboard.DashboardViewModel
 import kotlinx.android.synthetic.main.fragment_customer_dashboard.view.*
 
@@ -33,7 +32,10 @@ class CustomerDashboardFragment : Fragment() {
         var data: ArrayList<Data>? = fill_with_data()
 
         data?.let {
-            adapter = Recycler_CustomerView_Adapter(data)
+            adapter =
+                Recycler_CustomerView_Adapter(
+                    data
+                )
         }
 
         layoutManager = LinearLayoutManager(activity)
@@ -50,7 +52,7 @@ class CustomerDashboardFragment : Fragment() {
         data.add(
             Data(
                 "01-Sep-2020 13:20 pm",
-                "Bal Rs 350",
+                "",
                 "RS",
                 "Rs 2000",
                 "You'll get",
@@ -61,7 +63,7 @@ class CustomerDashboardFragment : Fragment() {
         data.add(
             Data(
                 "01-Aug-2020 16:20 pm",
-                "Bal Rs 150",
+                "",
                 "AS",
                 "Rs 1550",
                 "You'll get",
@@ -71,7 +73,7 @@ class CustomerDashboardFragment : Fragment() {
         data.add(
             Data(
                 "23-July-2020 18:10 pm",
-                "Bal Rs 250",
+                "",
                 "MS",
                 "Rs 2000",
                 "You'll give",

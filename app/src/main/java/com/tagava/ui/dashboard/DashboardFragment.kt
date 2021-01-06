@@ -4,11 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.Data
 import com.tagava.R
-import com.tagava.Recycler_View_Adapter
+import com.tagava.databinding.FragmentAddcustomerBinding
+import com.tagava.databinding.FragmentDashboardBinding
+import com.tagava.ui.addacustomer.AddCustomerViewModel
+import com.tagava.util.CustomeProgressDialog
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 
@@ -17,6 +25,8 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: Recycler_View_Adapter
+     var binding: FragmentDashboardBinding? = null
+    var customeProgressDialog: CustomeProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +41,13 @@ class DashboardFragment : Fragment() {
     ): View? {
 //        dashboardViewModel =
 //            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+      //  val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_dashboard, container, false
+        )
+
 
         var data: ArrayList<Data>? = fill_with_data()
 
@@ -40,10 +56,36 @@ class DashboardFragment : Fragment() {
         }
 
         layoutManager = LinearLayoutManager(activity)
-        root.recyclerview?.layoutManager = layoutManager
-        root.recyclerview?.adapter = adapter
+        binding?.root?.recyclerview?.layoutManager = layoutManager
+        binding?.root?.recyclerview?.adapter = adapter
 
-        return root
+        initViewModel()
+        return binding?.root
+    }
+
+
+    private fun initViewModel() {
+
+        var dashboardViewModelFactory = DashboardViewModelFactory()
+        this.dashboardViewModel =
+            activity?.let {
+                ViewModelProviders.of(it, dashboardViewModelFactory)
+                    .get(DashboardViewModel::class.java)
+            }!!
+        binding?.viewmodelDashboard = this.dashboardViewModel
+
+        this.dashboardViewModel?.progressDialog?.observe(this, Observer {
+            if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
+        })
+        this.dashboardViewModel.fetchDashboardDetails()
+
+        this.dashboardViewModel.fetchDashboardDetailsStausStatusLiveData.observe(requireActivity(), Observer {
+            Toast.makeText(activity, "Dashboard data called successfully " + it, Toast.LENGTH_SHORT)
+                .show();
+           // findNavController().navigate(R.id.navigation_home)
+
+
+        })
     }
 
     //Create a list of Data objects

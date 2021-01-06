@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tagava.ui.dashboard.Recycler_View_Adapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 

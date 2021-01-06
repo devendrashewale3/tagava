@@ -47,7 +47,7 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                     var response: RegisterResponse? = responseData as RegisterResponse
 
                     response.let {
-                        //  authTokenDataLiveData.value = response?.data?.get(0)?.token
+                        AuthViewModel.businessIDDataLiveData.value = response?.data?.get(0)?.businessId
                         registrationStatusLiveData.value = true
                     }
                 }
