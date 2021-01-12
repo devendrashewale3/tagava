@@ -3,9 +3,10 @@ package com.tagava.ui.dashboard
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tagava.data.Content
 import com.tagava.data.DashaboardDetailsRequest
+import com.tagava.data.DashboardResponse
 import com.tagava.data.ErrorData
-import com.tagava.data.RegisterResponse
 import com.tagava.repository.IAPICallback
 import com.tagava.repository.RetrofitRepository
 import com.tagava.ui.auth.AuthViewModel
@@ -16,6 +17,7 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
     var retrofitRepository: RetrofitRepository
     var fetchDashboardDetailsStausStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var progressDialog: SingleLiveEvent<Boolean>? = null
+    var customersDataLiveData: MutableLiveData<List<Content>> = MutableLiveData()
     var customerName: ObservableField<String>? = null
     var mobileNumber: ObservableField<String>? = null
 
@@ -30,7 +32,8 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
     fun fetchDashboardDetails() {
         progressDialog?.value = true
         var request = DashaboardDetailsRequest(
-            AuthViewModel.businessIDDataLiveData.value.toString()
+            AuthViewModel.businessIDDataLiveData.value.toString(),
+            ""
 
         )
 
@@ -39,10 +42,10 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
                 override fun onResponseSuccess(responseData: Any?) {
 
                     progressDialog?.value = false
-                    var response: RegisterResponse? = responseData as RegisterResponse
+                    var response: DashboardResponse? = responseData as DashboardResponse
 
                     response.let {
-                        //  authTokenDataLiveData.value = response?.data?.get(0)?.token
+                        customersDataLiveData.value = response?.data?.get(0)?.customers?.content
                         fetchDashboardDetailsStausStatusLiveData.value = true
                     }
                 }

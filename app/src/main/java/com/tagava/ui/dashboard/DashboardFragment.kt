@@ -9,13 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.Data
 import com.tagava.R
-import com.tagava.databinding.FragmentAddcustomerBinding
+import com.tagava.data.Content
 import com.tagava.databinding.FragmentDashboardBinding
-import com.tagava.ui.addacustomer.AddCustomerViewModel
 import com.tagava.util.CustomeProgressDialog
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
@@ -27,6 +25,7 @@ class DashboardFragment : Fragment() {
     private lateinit var adapter: Recycler_View_Adapter
      var binding: FragmentDashboardBinding? = null
     var customeProgressDialog: CustomeProgressDialog? = null
+    lateinit var data: ArrayList<Content>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +48,9 @@ class DashboardFragment : Fragment() {
         )
 
 
-        var data: ArrayList<Data>? = fill_with_data()
 
-        data?.let {
-            adapter = Recycler_View_Adapter(data)
-        }
 
-        layoutManager = LinearLayoutManager(activity)
-        binding?.root?.recyclerview?.layoutManager = layoutManager
-        binding?.root?.recyclerview?.adapter = adapter
+
 
         initViewModel()
         return binding?.root
@@ -79,13 +72,34 @@ class DashboardFragment : Fragment() {
         })
         this.dashboardViewModel.fetchDashboardDetails()
 
-        this.dashboardViewModel.fetchDashboardDetailsStausStatusLiveData.observe(requireActivity(), Observer {
-            Toast.makeText(activity, "Dashboard data called successfully " + it, Toast.LENGTH_SHORT)
-                .show();
-           // findNavController().navigate(R.id.navigation_home)
-
-
+        this.dashboardViewModel?.customersDataLiveData.observe(requireActivity(), Observer {
+            this.data = it as ArrayList<Content>
+            loadDataToRCView()
         })
+
+        this.dashboardViewModel.fetchDashboardDetailsStausStatusLiveData.observe(
+            requireActivity(),
+            Observer {
+                Toast.makeText(
+                    activity,
+                    "Dashboard data called successfully " + it,
+                    Toast.LENGTH_SHORT
+                )
+                    .show();
+                // findNavController().navigate(R.id.navigation_home)
+
+
+            })
+    }
+
+    fun loadDataToRCView() {
+        data?.let {
+            adapter = Recycler_View_Adapter(data)
+        }
+
+        layoutManager = LinearLayoutManager(activity)
+        binding?.root?.recyclerview?.layoutManager = layoutManager
+        binding?.root?.recyclerview?.adapter = adapter
     }
 
     //Create a list of Data objects

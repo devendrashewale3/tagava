@@ -15,12 +15,28 @@
         android:id="@+id/navigation_customer_dashboard"
         android:name="com.tagava.ui.customer_dashboard.CustomerDashboardFragment"
         android:label="@string/title_customer_dashboard"
-        tools:layout="@layout/fragment_customer_dashboard" />
+        tools:layout="@layout/fragment_customer_dashboard">
+        <argument
+            android:name="custid"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_addcustomer"
         android:name="com.tagava.ui.addacustomer.AddCustomerFragment"
         android:label="@string/title_addcustomer"
         tools:layout="@layout/fragment_addcustomer" />
+    <dialog
+        android:id="@+id/navigation_transaction"
+        android:name="com.tagava.ui.transaction.TransactionDialogFragment"
+        android:label="@string/tranaction"
+        tools:layout="@layout/transaction_dialog_fragment">
+        <argument
+            android:name="custid"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="string" />
+    </dialog>
 
 </navigation>

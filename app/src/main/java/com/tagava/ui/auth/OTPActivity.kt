@@ -66,6 +66,13 @@ class OTPActivity : AppCompatActivity() {
 
         authViewModel.verifyLoginOTPStatusLiveData.observe(this, Observer {
             if (it) {
+
+                authViewModel.fetchAllBusiness()
+            }
+        })
+
+        authViewModel.businessDataFetchStatus.observe(this, Observer {
+            if (it) {
                 var intent = Intent(this@OTPActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }

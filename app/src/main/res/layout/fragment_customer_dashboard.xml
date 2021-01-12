@@ -218,12 +218,12 @@
             android:background="#F60534"
             android:textColor="@color/white"
             android:padding="5dp"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatButton"
+            app:layout_constraintEnd_toStartOf="@+id/btnReceivePayment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButton"
+            android:id="@+id/btnReceivePayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="68dp"

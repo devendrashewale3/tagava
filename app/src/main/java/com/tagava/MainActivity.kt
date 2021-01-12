@@ -22,12 +22,12 @@ class MainActivity : AppCompatActivity() {
         context = this
         val data: ArrayList<Data>? = fill_with_data()
 
-        data?.let {
-            adapter = Recycler_View_Adapter(data)
-        }
+//        data?.let {
+//            adapter = Recycler_View_Adapter(data)
+//        }
         layoutManager = LinearLayoutManager(context)
         recyclerview?.adapter = adapter
-        recyclerview?.layoutManager =layoutManager
+        recyclerview?.layoutManager = layoutManager
 
 
     }

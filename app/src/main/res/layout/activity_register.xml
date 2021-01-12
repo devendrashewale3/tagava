@@ -70,6 +70,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#fff"
         android:onClick="@{()-> viewmodelRegister.registerUser()}"
         android:id="@+id/register_button"
         android:background="@drawable/button_background"

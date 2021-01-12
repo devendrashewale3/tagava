@@ -13,4 +13,5 @@
     <string name="register">Register</string>
     <string name="invalid_nmuber">Please enter valid mobile number.</string>
     <string name="title_customer_dashboard">Customer Dashboard</string>
+    <string name="tranaction">Payment</string>
 </resources>

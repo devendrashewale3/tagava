@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.Data
 import com.tagava.R
@@ -27,7 +29,7 @@ class CustomerDashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_customer_dashboard, container, false)
-
+        var custId = arguments?.getString("custid")
 
         var data: ArrayList<Data>? = fill_with_data()
 
@@ -41,6 +43,24 @@ class CustomerDashboardFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity)
         root.recyclerCustomerView?.layoutManager = layoutManager
         root.recyclerCustomerView?.adapter = adapter
+
+        root.btnMakePayment.setOnClickListener {
+            findNavController().navigate(
+                R.id.navigation_transaction, bundleOf(
+                    Pair("custid", custId),
+                    Pair("type", "give")
+                )
+            )
+        }
+
+        root.btnReceivePayment.setOnClickListener {
+            findNavController().navigate(
+                R.id.navigation_transaction, bundleOf(
+                    Pair("custid", custId),
+                    Pair("type", "got")
+                )
+            )
+        }
 
         return root
 

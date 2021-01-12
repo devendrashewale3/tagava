@@ -7,21 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.navigation.Navigation
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.tagava.Data
 import com.tagava.R
 import com.tagava.View_Holder
+import com.tagava.data.Content
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class Recycler_View_Adapter(
-    list: ArrayList<Data>
+    list: ArrayList<Content>
 ) :
     RecyclerView.Adapter<View_Holder>() {
-    var list = ArrayList<Data>()
+    var list = ArrayList<Content>()
 
     init {
         this.list = list
@@ -34,13 +35,13 @@ class Recycler_View_Adapter(
     }
 
     override fun onBindViewHolder(holder: View_Holder, position: Int) {
-        holder.title.setText(list[position].title)
-        holder.description.setText(list[position].description)
-        holder.placeholder.text = list[position].initials
-        holder.amountTextView.text = list[position].amount
-        holder.amountDescTextView.text = list[position].amountDes
+        holder.title.setText(list[position].customerName)
+        holder.description.setText(list[position].getOrGiveMsg)
+        holder.placeholder.text = list[position].customerName.subSequence(0, 1)
+        holder.amountTextView.text = list[position].amount.toString()
+        holder.amountDescTextView.text = list[position].getOrGiveMsg
 
-        if (list[position].returnBack)
+        if (list[position].getOrGiveMsg.equals("give"))
             holder.amountTextView.setTextColor(Color.RED)
         else
             holder.amountTextView.setTextColor(Color.GREEN)
@@ -50,9 +51,10 @@ class Recycler_View_Adapter(
             (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
         drawable.setColor(color)
         animate(holder)
-        holder.itemView.setOnClickListener(
-            Navigation.createNavigateOnClickListener(R.id.navigation_customer_dashboard)
-        )
+        val bundle = bundleOf(Pair("custid", list[position].customerId))
+        holder.itemView.setOnClickListener { view ->
+            view.findNavController().navigate(R.id.navigation_customer_dashboard, bundle)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -64,13 +66,13 @@ class Recycler_View_Adapter(
     }
 
     // Insert a new item to the RecyclerView
-    fun insert(position: Int, data: Data) {
+    fun insert(position: Int, data: Content) {
         list.add(position, data)
         notifyItemInserted(position)
     }
 
     // Remove a RecyclerView item containing the Data object
-    fun remove(data: Data) {
+    fun remove(data: Content) {
         val position = list.indexOf(data)
         list.removeAt(position)
         notifyItemRemoved(position)

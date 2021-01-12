@@ -233,31 +233,112 @@ class RetrofitRepository {
         headerMap["ContentType"] = "Application/json"
 
 
-        val call: Call<RegisterResponse> = apiService.fetchDashboardDetailsAPI(headerMap, request)
-        call.enqueue(object : Callback<RegisterResponse?> {
-            override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
+        val call: Call<DashboardResponse> = apiService.fetchDashboardDetailsAPI(
+            headerMap,
+            request.businessId,
+            request.searchByNameOrMobile
+        )
+        call.enqueue(object : Callback<DashboardResponse?> {
+            override fun onFailure(call: Call<DashboardResponse?>, t: Throwable) {
                 val error = ErrorData("error", "Generic error")
                 iapiCallback.onResponseFailure(error)
             }
 
             override fun onResponse(
-                call: Call<RegisterResponse?>,
-                response: Response<RegisterResponse?>
+                call: Call<DashboardResponse?>,
+                response: Response<DashboardResponse?>
             ) {
 
-
                 if (response.isSuccessful()) {
-                    val loginResponse: RegisterResponse? = response.body()
+                    val loginResponse: DashboardResponse? = response.body()
                     Log.d(
                         "Response",
                         String.valueOf(loginResponse?.toString())
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
-                    val loginResponse: RegisterResponse? = response.body()
+                    val loginResponse: DashboardResponse? = response.body()
+                    val addCustomerError = loginResponse?.error?.get(0)
+                    Log.e("error ", String.valueOf(response))
+                    iapiCallback.onResponseFailure(addCustomerError)
+                }
+            }
+
+        })
+    }
+
+    fun fetchAllBusinessData(iapiCallback: IAPICallback<Any?, ErrorData?>) {
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<BusinessAllResponse> = apiService.fetchAllBusinessAPI(headerMap)
+        call.enqueue(object : Callback<BusinessAllResponse?> {
+            override fun onFailure(call: Call<BusinessAllResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                call: Call<BusinessAllResponse?>,
+                response: Response<BusinessAllResponse?>
+            ) {
+
+
+                if (response.isSuccessful()) {
+                    val loginResponse: BusinessAllResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    val loginResponse: BusinessAllResponse? = response.body()
                     val addCustomerError = loginResponse?.error?.get(0)
                     Log.e("error ", response.errorBody().toString())
                     iapiCallback.onResponseFailure(addCustomerError)
+                }
+            }
+
+        })
+    }
+
+    fun createPayment(request: CreatePaymentRequest, iapiCallback: IAPICallback<Any?, ErrorData?>) {
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<CreatePaymentResponse> = apiService.createPaymentAPI(headerMap, request)
+        call.enqueue(object : Callback<CreatePaymentResponse?> {
+            override fun onFailure(call: Call<CreatePaymentResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                call: Call<CreatePaymentResponse?>,
+                response: Response<CreatePaymentResponse?>
+            ) {
+
+
+                if (response.isSuccessful()) {
+                    val createPaymentResponse: CreatePaymentResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(createPaymentResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(createPaymentResponse)
+                } else {
+                    val createPaymentResponse: CreatePaymentResponse? = response.body()
+                    val addCustomerError = createPaymentResponse?.error?.get(0)
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure(addCustomerError as ErrorData?)
                 }
             }
 

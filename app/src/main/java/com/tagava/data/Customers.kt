@@ -1,7 +1,7 @@
 package com.tagava.data
 
 data class Customers(
-    val content: List<Any>,
+    val content: List<Content>,
     val empty: Boolean,
     val first: Boolean,
     val last: Boolean,
@@ -9,7 +9,7 @@ data class Customers(
     val numberOfElements: Int,
     val pageable: Pageable,
     val size: Int,
-    val sort: SortX,
+    val sort: Sort,
     val totalElements: Int,
     val totalPages: Int
 )

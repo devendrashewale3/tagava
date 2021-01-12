@@ -17,6 +17,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     var verifyOTPStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var verifyLoginOTPStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var registrationStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    var businessDataFetchStatus: MutableLiveData<Boolean> = MutableLiveData()
     var mobile_number: ObservableField<String>? = null
     var progressDialog: SingleLiveEvent<Boolean>? = null
     var otpText: ObservableField<String>? = null
@@ -171,6 +172,27 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
             })
         }
+    }
+
+    fun fetchAllBusiness() {
+        this.retrofitRepository.fetchAllBusinessData(object : IAPICallback<Any?, ErrorData?> {
+            override fun onResponseSuccess(responseData: Any?) {
+
+                progressDialog?.value = false
+                var response: BusinessAllResponse? = responseData as BusinessAllResponse
+
+                response.let {
+                    AuthViewModel.businessIDDataLiveData.value = response?.data?.get(0)?.businessId
+                    businessDataFetchStatus.value = true
+                }
+            }
+
+            override fun onResponseFailure(failureData: ErrorData?) {
+                progressDialog?.value = false
+                businessDataFetchStatus.value = false
+            }
+
+        })
     }
 
 }

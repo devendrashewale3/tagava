@@ -44,10 +44,21 @@ interface APIService {
         @Body request: AddCustomerRequest
     ): Call<RegisterResponse>
 
-    @POST("dashboard/business")
+    @GET("dashboard/business")
     fun fetchDashboardDetailsAPI(
         @HeaderMap headerMap: HashMap<String, String>,
-        @Body request: DashaboardDetailsRequest
-    ): Call<RegisterResponse>
+        @Query("businessId") businessId: String,
+        @Query("searsearchByNameOrMobile") searsearchByNameOrMobile: String
+    ): Call<DashboardResponse>
+
+    @GET("business/getAll")
+    fun fetchAllBusinessAPI(@HeaderMap headerMap: HashMap<String, String>): Call<BusinessAllResponse>
+
+
+    @POST("transaction/create")
+    fun createPaymentAPI(
+        @HeaderMap authHeader: Map<String, String>,
+        @Body request: CreatePaymentRequest
+    ): Call<CreatePaymentResponse>
 
 }
