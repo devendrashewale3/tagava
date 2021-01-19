@@ -1,5 +1,6 @@
 package com.tagava.ui.splash
 
+import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -36,6 +37,8 @@ class SplashViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     }
 
     fun fetchRegResponse() {
+
+
 
         var token = AuthViewModel.authTokenDataLiveData.value.toString()
 

@@ -2,8 +2,10 @@ package com.tagava.ui.auth
 
 import `in`.aabhasjindal.otptextview.OTPListener
 import `in`.aabhasjindal.otptextview.OtpTextView
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -71,11 +73,31 @@ class OTPActivity : AppCompatActivity() {
             }
         })
 
+        AuthViewModel.businessIDDataLiveData.observe(this, Observer {
+            val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+            var editor = sharedPreference.edit()
+            editor.putString("bid",it)
+            editor.commit()
+        })
+
         authViewModel.businessDataFetchStatus.observe(this, Observer {
             if (it) {
                 var intent = Intent(this@OTPActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }
+        })
+
+        authViewModel.errorData.observe(this, Observer {
+
+            Toast.makeText(this@OTPActivity,it.message, Toast.LENGTH_LONG).show()
+
+        })
+
+        AuthViewModel.authTokenDataLiveData.observe(this@OTPActivity, Observer {
+            val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+            var editor = sharedPreference.edit()
+            editor.putString("tkn",it)
+            editor.commit()
         })
 
     }

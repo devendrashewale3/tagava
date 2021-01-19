@@ -51,5 +51,11 @@ class RegisterActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
+
+        registerViewModel.errorData.observe(this, Observer {
+
+            Toast.makeText(this@RegisterActivity,it.message,Toast.LENGTH_LONG).show()
+
+        })
     }
 }

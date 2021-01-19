@@ -24,6 +24,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     var businessName: ObservableField<String>? = null
     var userName: ObservableField<String>? = null
     var email: ObservableField<String>? = null
+    var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
     init {
@@ -67,8 +68,12 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 override fun onResponseFailure(failureData: ErrorData?) {
                     progressDialog?.value = false
                     loginDataLiveData.value = false
+                    errorData.value = failureData
+                    if (failureData?.code.equals("LG-INV-MB-001")) {
 
+                    } else
                     if (failureData?.code.equals("LG-INV-MB-002")) {
+
                         isUserRegistered.value = true
                         fetchRegOTP(request)
                     } else {
@@ -94,7 +99,8 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
             }
 
-            override fun onResponseFailure(ffailureData: ErrorData?) {
+            override fun onResponseFailure(failureData: ErrorData?) {
+                errorData.value = failureData
                 progressDialog?.value = false
                 loginDataLiveData.value = false
             }
@@ -133,6 +139,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 }
 
                     override fun onResponseFailure(failureData: ErrorData?) {
+                        errorData.value = failureData
                         progressDialog?.value = false
                         if (isUserRegistered.value!!)
                             verifyOTPStatusLiveData.value = false
@@ -160,12 +167,12 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                     response.let {
                         authTokenDataLiveData.value = response?.data?.get(0)?.token
-
                         registrationStatusLiveData.value = true
                     }
                 }
 
                 override fun onResponseFailure(failureData: ErrorData?) {
+                    errorData.value = failureData
                     progressDialog?.value = false
                     registrationStatusLiveData.value = false
                 }
@@ -182,12 +189,13 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 var response: BusinessAllResponse? = responseData as BusinessAllResponse
 
                 response.let {
-                    AuthViewModel.businessIDDataLiveData.value = response?.data?.get(0)?.businessId
+                    businessIDDataLiveData.value = response?.data?.get(0)?.businessId
                     businessDataFetchStatus.value = true
                 }
             }
 
             override fun onResponseFailure(failureData: ErrorData?) {
+                errorData.value = failureData
                 progressDialog?.value = false
                 businessDataFetchStatus.value = false
             }

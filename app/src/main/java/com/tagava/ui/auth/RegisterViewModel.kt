@@ -20,6 +20,7 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     var businessName: ObservableField<String>? = null
     var userName: ObservableField<String>? = null
     var email: ObservableField<String>? = null
+    var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
     init {
@@ -53,6 +54,7 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 }
 
                 override fun onResponseFailure(failureData: ErrorData?) {
+                    errorData.value = failureData
                     progressDialog?.value = false
                     registrationStatusLiveData.value = false
                 }

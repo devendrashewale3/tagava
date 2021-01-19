@@ -9,6 +9,7 @@ import com.tagava.data.ErrorData
 import com.tagava.data.RegisterResponse
 import com.tagava.repository.IAPICallback
 import com.tagava.repository.RetrofitRepository
+import com.tagava.ui.auth.AuthViewModel
 import com.tagava.util.SingleLiveEvent
 
 class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
@@ -18,6 +19,7 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
     var progressDialog: SingleLiveEvent<Boolean>? = null
     var customerName: ObservableField<String>? = null
     var mobileNumber: ObservableField<String>? = null
+    var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
     init {
@@ -38,7 +40,8 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
         progressDialog?.value = true
         var request = AddCustomerRequest(
             this.mobileNumber?.get().toString(),
-            this.customerName?.get().toString()
+            this.customerName?.get().toString(),
+                AuthViewModel.businessIDDataLiveData.value.toString()
         )
 
         if (request != null) {
@@ -55,6 +58,7 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
                 }
 
                 override fun onResponseFailure(failureData: ErrorData?) {
+                    errorData.value = failureData
                     progressDialog?.value = false
                     addCustomerStausStatusLiveData.value = false
                 }

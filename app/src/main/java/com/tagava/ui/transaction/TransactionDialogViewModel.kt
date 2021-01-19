@@ -2,6 +2,7 @@ package com.tagava.ui.transaction
 
 
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tagava.data.CreatePaymentRequest
 import com.tagava.data.CreatePaymentResponse
@@ -18,6 +19,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var amount: ObservableField<String>? = null
     var giveorgot: ObservableField<String>? = null
     var customerId: ObservableField<String>? = null
+    var CustomerPaymentStatus : MutableLiveData<Boolean> = MutableLiveData()
 
 
     init {
@@ -26,6 +28,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
         this.amount = ObservableField("")
         this.giveorgot = ObservableField("")
         this.customerId = ObservableField("")
+        CustomerPaymentStatus.value = false
     }
 
     fun createPayment() {
@@ -47,7 +50,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
                     var response: CreatePaymentResponse? = responseData as CreatePaymentResponse
 
                     response.let {
-
+                        CustomerPaymentStatus.value = true
                     }
                 }
 

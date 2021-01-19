@@ -6,9 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.tagava.R
 import com.tagava.databinding.TransactionDialogFragmentBinding
+import com.tagava.util.CustomeProgressDialog
 
 class TransactionDialogFragment : DialogFragment() {
 
@@ -18,6 +23,8 @@ class TransactionDialogFragment : DialogFragment() {
     private var binding: TransactionDialogFragmentBinding? = null
     var custId: String? = null
     var type: String? = null
+    var customeProgressDialog: CustomeProgressDialog? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +34,7 @@ class TransactionDialogFragment : DialogFragment() {
             inflater,
             R.layout.transaction_dialog_fragment, container, false
         )
+        customeProgressDialog = CustomeProgressDialog(requireContext())
 
         custId = arguments?.getString("custid")
         type = arguments?.getString("type")
@@ -53,8 +61,20 @@ class TransactionDialogFragment : DialogFragment() {
             }!!
         binding?.viewmodelTransaction = transactionDialogViewModel
 
+        transactionDialogViewModel?.progressDialog?.observe(this, Observer {
+            if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
+        })
+
         transactionDialogViewModel.customerId?.set(custId)
         transactionDialogViewModel.giveorgot?.set(type)
+
+        transactionDialogViewModel.CustomerPaymentStatus.value = false
+
+        transactionDialogViewModel.CustomerPaymentStatus.observe( requireActivity(), Observer {
+            if (it){
+                findNavController().popBackStack()
+            }
+        })
     }
 
 }

@@ -1,5 +1,6 @@
 package com.tagava.ui.splash
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.tagava.DashboardActivity
 import com.tagava.R
 import com.tagava.databinding.ActivitySplashBinding
 import com.tagava.ui.auth.AuthActivity
+import com.tagava.ui.auth.AuthViewModel
 import com.tagava.util.CustomeProgressDialog
 
 
@@ -70,7 +72,19 @@ class SplashActivity : AppCompatActivity() {
             }
         })
 
-        splashViewModel.fetchRegResponse()
+        val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+        var token: String? = sharedPreference.getString("tkn","")
+        var bid: String? = sharedPreference.getString("bid","")
+        if (!token.isNullOrEmpty()){
+             token.let {
+                 AuthViewModel.authTokenDataLiveData.value = it
+             }
+             bid?.let {
+                 AuthViewModel.businessIDDataLiveData.value =it
+            }
+            goToMainActivity()
+        } else
+           splashViewModel.fetchRegResponse()
 
     }
 

@@ -1,5 +1,6 @@
 package com.tagava.ui.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -50,11 +51,24 @@ class AuthActivity : AppCompatActivity() {
 
 
         authViewModel.loginDataLiveData.observe(this, Observer {
-            Toast.makeText(this@AuthActivity, "The OTP is " + it, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this@AuthActivity, "The OTP is " + it, Toast.LENGTH_SHORT).show();
             if (it) {
                 var intent = Intent(this@AuthActivity, OTPActivity::class.java);
                 startActivity(intent)
             }
+        })
+
+        authViewModel.errorData.observe(this, Observer {
+
+           Toast.makeText(this@AuthActivity,it.message,Toast.LENGTH_LONG).show()
+
+        })
+
+        AuthViewModel.authTokenDataLiveData.observe(this@AuthActivity, Observer {
+            val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+            var editor = sharedPreference.edit()
+            editor.putString("tkn",it)
+            editor.commit()
         })
     }
 

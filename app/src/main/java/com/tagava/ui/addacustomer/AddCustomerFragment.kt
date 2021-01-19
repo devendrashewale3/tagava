@@ -60,6 +60,12 @@ class AddCustomerFragment : Fragment() {
 
 
         })
+
+        addCustomerViewModel.errorData.observe(requireActivity(), Observer {
+
+            Toast.makeText(requireContext(),it.message,Toast.LENGTH_LONG).show()
+
+        })
     }
 
 
