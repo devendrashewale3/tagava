@@ -48,7 +48,7 @@ class CustomerDashboardFragment : Fragment() {
             findNavController().navigate(
                 R.id.navigation_transaction, bundleOf(
                     Pair("custid", custId),
-                    Pair("type", "give")
+                    Pair("type", "GAVE")
                 )
             )
         }
@@ -57,7 +57,7 @@ class CustomerDashboardFragment : Fragment() {
             findNavController().navigate(
                 R.id.navigation_transaction, bundleOf(
                     Pair("custid", custId),
-                    Pair("type", "got")
+                    Pair("type", "GOT")
                 )
             )
         }

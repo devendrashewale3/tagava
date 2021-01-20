@@ -14,4 +14,12 @@
     <string name="invalid_nmuber">Please enter valid mobile number.</string>
     <string name="title_customer_dashboard">Customer Dashboard</string>
     <string name="tranaction">Payment</string>
+    <string-array name="category">
+        <item>Top News</item>
+        <item>Business</item>
+        <item>Politics</item>
+        <item>Sports</item>
+        <item>Technology</item>
+        <item>Movies</item>
+    </string-array>
 </resources>
