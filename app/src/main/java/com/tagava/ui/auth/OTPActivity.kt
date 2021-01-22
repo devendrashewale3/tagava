@@ -73,7 +73,7 @@ class OTPActivity : AppCompatActivity() {
             }
         })
 
-        AuthViewModel.businessIDDataLiveData.observe(this, Observer {
+        AuthViewModel.businessSelectedIDDataLiveData.observe(this, Observer {
             val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
             var editor = sharedPreference.edit()
             editor.putString("bid",it)

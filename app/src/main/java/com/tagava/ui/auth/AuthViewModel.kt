@@ -39,7 +39,8 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
     companion object {
         var mobileNumberDataLiveData: MutableLiveData<String> = MutableLiveData()
-        var businessIDDataLiveData: MutableLiveData<String> = MutableLiveData()
+        var businessSelectedIDDataLiveData: MutableLiveData<String> = MutableLiveData()
+        var businessIDDataLiveData: MutableLiveData<List<BusinessData>> = MutableLiveData()
         var authTokenDataLiveData: MutableLiveData<String> = MutableLiveData()
         var authMobileNumberDataLiveData: MutableLiveData<String> = MutableLiveData()
         var isUserRegistered: MutableLiveData<Boolean> = MutableLiveData()
@@ -189,7 +190,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 var response: BusinessAllResponse? = responseData as BusinessAllResponse
 
                 response.let {
-                    businessIDDataLiveData.value = response?.data?.get(0)?.businessId
+                    businessSelectedIDDataLiveData.value = response?.data?.get(0)?.businessId
                     businessDataFetchStatus.value = true
                 }
             }

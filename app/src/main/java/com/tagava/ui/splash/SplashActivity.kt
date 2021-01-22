@@ -80,7 +80,7 @@ class SplashActivity : AppCompatActivity() {
                  AuthViewModel.authTokenDataLiveData.value = it
              }
              bid?.let {
-                 AuthViewModel.businessIDDataLiveData.value =it
+                 AuthViewModel.businessSelectedIDDataLiveData.value =it
             }
             goToMainActivity()
         } else

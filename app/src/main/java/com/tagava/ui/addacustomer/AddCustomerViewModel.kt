@@ -41,7 +41,7 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
         var request = AddCustomerRequest(
             this.mobileNumber?.get().toString(),
             this.customerName?.get().toString(),
-                AuthViewModel.businessIDDataLiveData.value.toString()
+                AuthViewModel.businessSelectedIDDataLiveData.value.toString()
         )
 
         if (request != null) {

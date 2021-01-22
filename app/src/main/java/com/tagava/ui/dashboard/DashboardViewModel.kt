@@ -32,7 +32,7 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
     fun fetchDashboardDetails() {
         progressDialog?.value = true
         var request = DashaboardDetailsRequest(
-            AuthViewModel.businessIDDataLiveData.value.toString(),
+            AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
             ""
 
         )

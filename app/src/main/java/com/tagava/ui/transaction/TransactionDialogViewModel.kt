@@ -36,7 +36,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
         var request = this.amount?.get()?.let {
             CreatePaymentRequest(
                 parseInt(it),
-                AuthViewModel.businessIDDataLiveData.value.toString(),
+                AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
                 this.customerId?.get().toString(),
                 this.giveorgot?.get().toString()
             )
