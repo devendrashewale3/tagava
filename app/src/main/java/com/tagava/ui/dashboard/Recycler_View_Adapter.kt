@@ -51,7 +51,10 @@ class Recycler_View_Adapter(
             (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
         drawable.setColor(color)
         animate(holder)
-        val bundle = bundleOf(Pair("custid", list[position].customerId))
+        val bundle = bundleOf(
+            Pair("custid", list[position].customerId),
+            Pair("custName", list[position].customerName)
+        )
         holder.itemView.setOnClickListener { view ->
             view.findNavController().navigate(R.id.navigation_customer_dashboard, bundle)
         }

@@ -191,6 +191,7 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                 response.let {
                     businessSelectedIDDataLiveData.value = response?.data?.get(0)?.businessId
+                    businessIDDataLiveData.value = response?.data
                     businessDataFetchStatus.value = true
                 }
             }

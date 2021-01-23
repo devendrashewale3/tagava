@@ -5,5 +5,6 @@ package com.tagava.data
  */
 data class DashaboardDetailsRequest(
     var businessId: String,
-    var searchByNameOrMobile: String
+    var searchByNameOrMobile: String,
+    var customerId: String
 )

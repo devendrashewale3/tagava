@@ -51,6 +51,13 @@ interface APIService {
         @Query("searsearchByNameOrMobile") searsearchByNameOrMobile: String
     ): Call<DashboardResponse>
 
+    @GET("dashboard/customer")
+    fun fetchCustomerDashboardDetailsAPI(
+        @HeaderMap headerMap: HashMap<String, String>,
+        @Query("businessId") businessId: String,
+        @Query("customerId") customerId: String
+    ): Call<CustomerDashboardResponse>
+
     @GET("business/getAll")
     fun fetchAllBusinessAPI(@HeaderMap headerMap: HashMap<String, String>): Call<BusinessAllResponse>
 

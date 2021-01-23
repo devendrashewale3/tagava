@@ -267,6 +267,53 @@ class RetrofitRepository {
         })
     }
 
+    fun fetchCustomerDashboardDetails(
+        request: DashaboardDetailsRequest,
+        iapiCallback: IAPICallback<*, *>
+    ) {
+
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<CustomerDashboardResponse> = apiService.fetchCustomerDashboardDetailsAPI(
+            headerMap,
+            request.businessId,
+            request.customerId
+        )
+        call.enqueue(object : Callback<CustomerDashboardResponse?> {
+            override fun onFailure(call: Call<CustomerDashboardResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                call: Call<CustomerDashboardResponse?>,
+                response: Response<CustomerDashboardResponse?>
+            ) {
+
+                if (response.isSuccessful()) {
+                    val loginResponse: CustomerDashboardResponse? = response.body()
+                    Log.d(
+                        "Response",
+                        String.valueOf(loginResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(loginResponse)
+                } else {
+                    val loginResponse: CustomerDashboardResponse? = response.body()
+                    val addCustomerError = loginResponse?.error?.get(0)
+                    Log.e("error ", String.valueOf(response))
+                    iapiCallback.onResponseFailure(addCustomerError)
+                }
+            }
+
+        })
+    }
+
+
     fun fetchAllBusinessData(iapiCallback: IAPICallback<Any?, ErrorData?>) {
         var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
         val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()

@@ -4,13 +4,16 @@ package com.tagava
 
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.*
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
@@ -18,6 +21,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tagava.data.BusinessData
+import com.tagava.ui.auth.AuthViewModel
 
 
 class DashboardActivity : AppCompatActivity() {
@@ -41,14 +46,25 @@ class DashboardActivity : AppCompatActivity() {
 
         //toolbar.setLogo(R.drawable.ic_drawer)
 
-        val spinnerAdapter: SpinnerAdapter = ArrayAdapter.createFromResource(applicationContext, R.array.category, R.layout.spinner_dropdown_item)
+
+        var buisnessData: List<BusinessData>? = AuthViewModel.businessIDDataLiveData?.value
+
+
+        val spinnerAdapter = BusinessSpinnerAdapter(applicationContext, buisnessData)
         val navigationSpinner = findViewById<Spinner>(R.id.spinner_nav)
         navigationSpinner.adapter = spinnerAdapter
-       navigationSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View, position: Int, id: Long) {
-                Toast.makeText(this@DashboardActivity,
-                        "you selected: " + category.get(position),
-                        Toast.LENGTH_SHORT).show()
+        navigationSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                Toast.makeText(
+                    this@DashboardActivity,
+                    "you selected: " + category.get(position),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -74,6 +90,20 @@ class DashboardActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+
+            navController.popBackStack()
+
+        }
+
+        toolbar.setTitleTextColor(Color.parseColor("#FFFFFF"))
+
+        toolbar.navigationIcon?.setColorFilter(
+            Color.parseColor("#FFFFFF"),
+            PorterDuff.Mode.SRC_ATOP
+        );
 
     }
 

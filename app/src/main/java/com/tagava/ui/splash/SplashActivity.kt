@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -72,17 +73,31 @@ class SplashActivity : AppCompatActivity() {
             }
         })
 
-        val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
-        var token: String? = sharedPreference.getString("tkn","")
-        var bid: String? = sharedPreference.getString("bid","")
-        if (!token.isNullOrEmpty()){
-             token.let {
-                 AuthViewModel.authTokenDataLiveData.value = it
-             }
-             bid?.let {
-                 AuthViewModel.businessSelectedIDDataLiveData.value =it
+        splashViewModel.businessDataFetchStatus.observe(this, Observer {
+            if (it) {
+                goToMainActivity()
             }
-            goToMainActivity()
+        })
+
+        splashViewModel.errorData.observe(this, Observer {
+
+            Toast.makeText(this@SplashActivity, it.message, Toast.LENGTH_LONG).show()
+
+        })
+
+        val sharedPreference = getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+        var token: String? = sharedPreference.getString("tkn", "")
+        var bid: String? = sharedPreference.getString("bid", "")
+        if (!token.isNullOrEmpty()) {
+            token.let {
+                AuthViewModel.authTokenDataLiveData.value = it
+            }
+            bid?.let {
+                AuthViewModel.businessSelectedIDDataLiveData.value = it
+            }
+
+            splashViewModel.fetchAllBusiness()
+
         } else
            splashViewModel.fetchRegResponse()
 

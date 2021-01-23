@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <data>
+
+        <variable
+            name="viewmodelCustomerDashboard"
+            type="com.tagava.ui.customer_dashboard.CustomerDashboardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:background="@color/colorApp"
-        app:layout_constraintBottom_toTopOf="@id/constraintLayout2"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:background="@color/colorApp"
+            app:layout_constraintBottom_toTopOf="@id/constraintLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -64,9 +73,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center|bottom"
+
                         android:textColor="#2EB975"
                         android:textSize="21sp"
-                        android:text=" Rs 20000" />
+                        android:text="@={viewmodelCustomerDashboard.totalAmtGive}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -94,7 +104,7 @@
                         android:gravity="center|bottom"
                         android:textColor="#F60534"
                         android:textSize="21sp"
-                        android:text=" Rs 20000" />
+                        android:text="@={viewmodelCustomerDashboard.totalAmtGot}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -230,6 +240,7 @@
             android:background="#F60534"
             android:textColor="@color/white"
             android:padding="5dp"
+            android:onClick="@{()-> viewmodelCustomerDashboard.makePayment()}"
             app:layout_constraintEnd_toStartOf="@+id/btnReceivePayment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -243,11 +254,13 @@
             android:background="#2EB975"
             android:textColor="@color/white"
             android:padding="5dp"
+            android:onClick="@{()-> viewmodelCustomerDashboard.receivePayment()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnMakePayment"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+</layout>

@@ -8,15 +8,15 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.tagava.CustomerView_Holder
-import com.tagava.Data
 import com.tagava.R
+import com.tagava.data.Entry
 
 
 class Recycler_CustomerView_Adapter(
-    list: ArrayList<Data>
+    list: ArrayList<Entry>
 ) :
     RecyclerView.Adapter<CustomerView_Holder>() {
-    var list = ArrayList<Data>()
+    var list = ArrayList<Entry>()
 
     init {
         this.list = list
@@ -29,11 +29,11 @@ class Recycler_CustomerView_Adapter(
     }
 
     override fun onBindViewHolder(holder: CustomerView_Holder, position: Int) {
-        holder.title.setText(list[position].title)
-        holder.description.setText(list[position].description)
+        holder.title.setText(list[position].date)
+        holder.description.setText(list[position].gaveOrGot)
         //   holder.placeholder.text = list[position].initials
-        holder.amountTextView.text = list[position].amount
-        if (list[position].returnBack)
+        holder.amountTextView.text = list[position].gaveOrGotAmount.toString()
+        if (list[position].gaveOrGot.equals("GAVE"))
             holder.amountTextView.setTextColor(Color.RED)
         else
             holder.amountTextView.setTextColor(Color.GREEN)
@@ -54,19 +54,6 @@ class Recycler_CustomerView_Adapter(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-    }
-
-    // Insert a new item to the RecyclerView
-    fun insert(position: Int, data: Data) {
-        list.add(position, data)
-        notifyItemInserted(position)
-    }
-
-    // Remove a RecyclerView item containing the Data object
-    fun remove(data: Data) {
-        val position = list.indexOf(data)
-        list.removeAt(position)
-        notifyItemRemoved(position)
     }
 
     fun animate(viewHolder: CustomerView_Holder) {

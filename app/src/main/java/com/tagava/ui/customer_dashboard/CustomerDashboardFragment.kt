@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tagava.Data
 import com.tagava.R
-import com.tagava.ui.dashboard.DashboardViewModel
+import com.tagava.data.Entry
+import com.tagava.databinding.FragmentCustomerDashboardBinding
+import com.tagava.util.CustomeProgressDialog
 import kotlinx.android.synthetic.main.fragment_customer_dashboard.view.*
 
 
@@ -19,91 +25,116 @@ import kotlinx.android.synthetic.main.fragment_customer_dashboard.view.*
  */
 class CustomerDashboardFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var customerDashboardViewModel: CustomerDashboardViewModel
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: Recycler_CustomerView_Adapter
+    private lateinit var custId: String
+    private lateinit var custName: String
+    var customeProgressDialog: CustomeProgressDialog? = null
+
+    var binding: FragmentCustomerDashboardBinding? = null
+
+    var data: ArrayList<Entry> = ArrayList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val navigationSpinner = activity?.findViewById<Spinner>(R.id.spinner_nav)
+        navigationSpinner?.visibility = View.INVISIBLE
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_customer_dashboard, container, false)
-        var custId = arguments?.getString("custid")
+        custId = arguments?.getString("custid").toString()
 
-        var data: ArrayList<Data>? = fill_with_data()
 
-        data?.let {
-            adapter =
-                Recycler_CustomerView_Adapter(
-                    data
+
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_customer_dashboard, container, false
+        )
+
+
+
+
+        initViewModel()
+
+        return binding?.root
+
+    }
+
+
+    private fun initViewModel() {
+
+        var customerDashboardViewModelFactory = CustomerDashboardViewModelFactory()
+        this.customerDashboardViewModel =
+            activity?.let {
+                ViewModelProviders.of(it, customerDashboardViewModelFactory)
+                    .get(CustomerDashboardViewModel::class.java)
+            }!!
+        binding?.viewmodelCustomerDashboard = this.customerDashboardViewModel
+
+        this.customerDashboardViewModel?.progressDialog?.observe(this, Observer {
+            if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
+        })
+        this.customerDashboardViewModel.fetchCustomerDashboardDetails(custId)
+
+        this.customerDashboardViewModel?.makePaymentEvent?.observe(requireActivity(), Observer {
+            if (it) {
+                findNavController().navigate(
+                    R.id.navigation_transaction, bundleOf(
+                        Pair("custid", custId),
+                        Pair("type", "GAVE")
+                    )
                 )
+            }
+        })
+
+        this.customerDashboardViewModel?.receivePaymentEvent?.observe(requireActivity(), Observer {
+            if (it) {
+                findNavController().navigate(
+                    R.id.navigation_transaction, bundleOf(
+                        Pair("custid", custId),
+                        Pair("type", "GOT")
+                    )
+                )
+            }
+        })
+
+
+        this.customerDashboardViewModel.customersDataLiveData?.observe(requireActivity(), Observer {
+            this.data.clear()
+            if (!it.isNullOrEmpty()) {
+                this.data = it as ArrayList<Entry>
+                loadDataToRCView()
+            }
+        })
+
+        this.customerDashboardViewModel.errorData.observe(requireActivity(), Observer {
+
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+
+        })
+    }
+
+
+    fun loadDataToRCView() {
+        data?.let {
+            adapter = Recycler_CustomerView_Adapter(data)
         }
 
         layoutManager = LinearLayoutManager(activity)
-        root.recyclerCustomerView?.layoutManager = layoutManager
-        root.recyclerCustomerView?.adapter = adapter
-
-        root.btnMakePayment.setOnClickListener {
-            findNavController().navigate(
-                R.id.navigation_transaction, bundleOf(
-                    Pair("custid", custId),
-                    Pair("type", "GAVE")
-                )
-            )
-        }
-
-        root.btnReceivePayment.setOnClickListener {
-            findNavController().navigate(
-                R.id.navigation_transaction, bundleOf(
-                    Pair("custid", custId),
-                    Pair("type", "GOT")
-                )
-            )
-        }
-
-        return root
-
+        binding?.root?.recyclerCustomerView?.layoutManager = layoutManager
+        binding?.root?.recyclerCustomerView?.adapter = adapter
     }
 
-    //Create a list of Data objects
-    fun fill_with_data(): ArrayList<Data>? {
-        val data: ArrayList<Data> = ArrayList()
-        data.add(
-            Data(
-                "01-Sep-2020 13:20 pm",
-                "",
-                "RS",
-                "Rs 2000",
-                "You'll get",
-                true
 
-            )
-        )
-        data.add(
-            Data(
-                "01-Aug-2020 16:20 pm",
-                "",
-                "AS",
-                "Rs 1550",
-                "You'll get",
-                true
-            )
-        )
-        data.add(
-            Data(
-                "23-July-2020 18:10 pm",
-                "",
-                "MS",
-                "Rs 2000",
-                "You'll give",
-                false
-            )
-        )
-
-
-
-
-        return data
-    }
 }

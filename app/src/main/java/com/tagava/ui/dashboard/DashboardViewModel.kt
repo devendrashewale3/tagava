@@ -15,7 +15,7 @@ import com.tagava.util.SingleLiveEvent
 class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() {
 
     var retrofitRepository: RetrofitRepository
-    var fetchDashboardDetailsStausStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    var fetchDashboardDetailsStatusLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var progressDialog: SingleLiveEvent<Boolean>? = null
     var customersDataLiveData: MutableLiveData<List<Content>> = MutableLiveData()
     var customerName: ObservableField<String>? = null
@@ -33,8 +33,8 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
         progressDialog?.value = true
         var request = DashaboardDetailsRequest(
             AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
+            "",
             ""
-
         )
 
         if (request != null) {
@@ -46,13 +46,13 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
 
                     response.let {
                         customersDataLiveData.value = response?.data?.get(0)?.customers?.content
-                        fetchDashboardDetailsStausStatusLiveData.value = true
+                        fetchDashboardDetailsStatusLiveData.value = true
                     }
                 }
 
                 override fun onResponseFailure(failureData: ErrorData?) {
                     progressDialog?.value = false
-                    fetchDashboardDetailsStausStatusLiveData.value = false
+                    fetchDashboardDetailsStatusLiveData.value = false
                 }
 
             })

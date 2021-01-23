@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.tagava.Data
 import com.tagava.R
 import com.tagava.data.Content
 import com.tagava.databinding.FragmentDashboardBinding
@@ -23,13 +23,20 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: Recycler_View_Adapter
-     var binding: FragmentDashboardBinding? = null
+    var binding: FragmentDashboardBinding? = null
     var customeProgressDialog: CustomeProgressDialog? = null
     lateinit var data: ArrayList<Content>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true);
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val navigationSpinner = activity?.findViewById<Spinner>(R.id.spinner_nav)
+        navigationSpinner?.visibility = View.VISIBLE
 
     }
 
@@ -40,16 +47,12 @@ class DashboardFragment : Fragment() {
     ): View? {
 //        dashboardViewModel =
 //            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-      //  val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        //  val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_dashboard, container, false
         )
-
-
-
-
 
 
         initViewModel()
@@ -77,7 +80,7 @@ class DashboardFragment : Fragment() {
             loadDataToRCView()
         })
 
-        this.dashboardViewModel.fetchDashboardDetailsStausStatusLiveData.observe(
+        this.dashboardViewModel.fetchDashboardDetailsStatusLiveData.observe(
             requireActivity(),
             Observer {
                 Toast.makeText(

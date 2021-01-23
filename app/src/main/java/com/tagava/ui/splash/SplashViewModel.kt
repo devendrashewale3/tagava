@@ -1,10 +1,10 @@
 package com.tagava.ui.splash
 
-import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tagava.data.BusinessAllResponse
 import com.tagava.data.ErrorData
 import com.tagava.data.LoginRequest
 import com.tagava.data.LoginResponse
@@ -27,6 +27,8 @@ class SplashViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
     val liveData: LiveData<SplashState>
         get() = mutableLiveData
     private val mutableLiveData = MutableLiveData<SplashState>()
+    var businessDataFetchStatus: MutableLiveData<Boolean> = MutableLiveData()
+    var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
     init {
@@ -112,6 +114,30 @@ class SplashViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
             }
         }
 
+    }
+
+    fun fetchAllBusiness() {
+        this.retrofitRepository.fetchAllBusinessData(object : IAPICallback<Any?, ErrorData?> {
+            override fun onResponseSuccess(responseData: Any?) {
+
+                progressDialog?.value = false
+                var response: BusinessAllResponse? = responseData as BusinessAllResponse
+
+                response.let {
+                    AuthViewModel.businessSelectedIDDataLiveData.value =
+                        response?.data?.get(0)?.businessId
+                    AuthViewModel.businessIDDataLiveData.value = response?.data
+                    businessDataFetchStatus.value = true
+                }
+            }
+
+            override fun onResponseFailure(failureData: ErrorData?) {
+                errorData.value = failureData
+                progressDialog?.value = false
+                businessDataFetchStatus.value = false
+            }
+
+        })
     }
 
     sealed class SplashState {

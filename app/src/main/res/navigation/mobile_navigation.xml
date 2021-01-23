@@ -14,10 +14,13 @@
     <fragment
         android:id="@+id/navigation_customer_dashboard"
         android:name="com.tagava.ui.customer_dashboard.CustomerDashboardFragment"
-        android:label="@string/title_customer_dashboard"
+        android:label="{custName}"
         tools:layout="@layout/fragment_customer_dashboard">
         <argument
             android:name="custid"
+            app:argType="string" />
+        <argument
+            android:name="custName"
             app:argType="string" />
     </fragment>
 
