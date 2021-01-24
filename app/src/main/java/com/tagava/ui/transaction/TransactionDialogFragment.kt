@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tagava.R
 import com.tagava.databinding.TransactionDialogFragmentBinding
+import com.tagava.ui.customer_dashboard.CustomerDashboardViewModel
 import com.tagava.util.CustomeProgressDialog
 
 class TransactionDialogFragment : DialogFragment() {
@@ -23,8 +25,13 @@ class TransactionDialogFragment : DialogFragment() {
     private var binding: TransactionDialogFragmentBinding? = null
     var custId: String? = null
     var type: String? = null
+    var custName: String? = null
     var customeProgressDialog: CustomeProgressDialog? = null
+    override fun onResume() {
+        super.onResume()
 
+        this.transactionDialogViewModel.CustomerPaymentStatus.value = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +45,7 @@ class TransactionDialogFragment : DialogFragment() {
 
         custId = arguments?.getString("custid")
         type = arguments?.getString("type")
+        custName = arguments?.getString("custName")
 
         initViewModel()
         return binding?.root
@@ -68,12 +76,27 @@ class TransactionDialogFragment : DialogFragment() {
         transactionDialogViewModel.customerId?.set(custId)
         transactionDialogViewModel.giveorgot?.set(type)
 
-        transactionDialogViewModel.CustomerPaymentStatus.value = false
+        transactionDialogViewModel.amount?.set("")
 
-        transactionDialogViewModel.CustomerPaymentStatus.observe( requireActivity(), Observer {
-            if (it){
-                findNavController().popBackStack()
+        transactionDialogViewModel.CustomerPaymentStatus.observe(requireActivity(), Observer {
+            if (it) {
+                lifecycleScope.launchWhenResumed {
+                    val bundle = bundleOf(
+                        Pair("custid", custId),
+                        Pair("custName", custName)
+                    )
+
+                    CustomerDashboardViewModel?.isTransactionPopupCalled?.value = false
+                    findNavController().popBackStack()
+
+                }
             }
+        })
+
+        this.transactionDialogViewModel.errorData.observe(requireActivity(), Observer {
+
+            Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+
         })
     }
 

@@ -3,6 +3,7 @@ package com.tagava.ui.auth
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.tagava.data.BusinessAllResponse
 import com.tagava.data.ErrorData
 import com.tagava.data.RegisterRequest
 import com.tagava.data.RegisterResponse
@@ -48,8 +49,9 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                     var response: RegisterResponse? = responseData as RegisterResponse
 
                     response.let {
+
                         AuthViewModel.businessSelectedIDDataLiveData.value = response?.data?.get(0)?.businessId
-                        registrationStatusLiveData.value = true
+                        fetchAllBusiness()
                     }
                 }
 
@@ -61,6 +63,31 @@ class RegisterViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
             })
         }
+    }
+
+
+    fun fetchAllBusiness() {
+        this.retrofitRepository.fetchAllBusinessData(object : IAPICallback<Any?, ErrorData?> {
+            override fun onResponseSuccess(responseData: Any?) {
+
+                progressDialog?.value = false
+                var response: BusinessAllResponse? = responseData as BusinessAllResponse
+
+                response.let {
+                    AuthViewModel.businessSelectedIDDataLiveData.value =
+                        response?.data?.get(0)?.businessId
+                    AuthViewModel.businessIDDataLiveData.value = response?.data
+                    registrationStatusLiveData.value = true
+                }
+            }
+
+            override fun onResponseFailure(failureData: ErrorData?) {
+                errorData.value = failureData
+                progressDialog?.value = false
+                registrationStatusLiveData.value = false
+            }
+
+        })
     }
 
 }

@@ -15,6 +15,7 @@
         android:id="@+id/navigation_customer_dashboard"
         android:name="com.tagava.ui.customer_dashboard.CustomerDashboardFragment"
         android:label="{custName}"
+        app:popUpToInclusive="true"
         tools:layout="@layout/fragment_customer_dashboard">
         <argument
             android:name="custid"

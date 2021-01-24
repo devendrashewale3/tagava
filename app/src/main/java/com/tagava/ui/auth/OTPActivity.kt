@@ -61,6 +61,7 @@ class OTPActivity : AppCompatActivity() {
 
         authViewModel.verifyOTPStatusLiveData.observe(this, Observer {
             if (it) {
+                finish()
                 var intent = Intent(this@OTPActivity, RegisterActivity::class.java);
                 startActivity(intent)
             }
@@ -82,6 +83,7 @@ class OTPActivity : AppCompatActivity() {
 
         authViewModel.businessDataFetchStatus.observe(this, Observer {
             if (it) {
+                finish()
                 var intent = Intent(this@OTPActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }

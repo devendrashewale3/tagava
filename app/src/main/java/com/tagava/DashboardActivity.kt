@@ -13,7 +13,6 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
@@ -49,25 +48,27 @@ class DashboardActivity : AppCompatActivity() {
 
         var buisnessData: List<BusinessData>? = AuthViewModel.businessIDDataLiveData?.value
 
+        if (!buisnessData.isNullOrEmpty() && buisnessData.size > 0) {
+            val spinnerAdapter = BusinessSpinnerAdapter(applicationContext, buisnessData)
+            val navigationSpinner = findViewById<Spinner>(R.id.spinner_nav)
 
-        val spinnerAdapter = BusinessSpinnerAdapter(applicationContext, buisnessData)
-        val navigationSpinner = findViewById<Spinner>(R.id.spinner_nav)
-        navigationSpinner.adapter = spinnerAdapter
-        navigationSpinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                Toast.makeText(
-                    this@DashboardActivity,
-                    "you selected: " + category.get(position),
-                    Toast.LENGTH_SHORT
-                ).show()
+            navigationSpinner.adapter = spinnerAdapter
+            navigationSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+//                Toast.makeText(
+//                    this@DashboardActivity,
+//                    "you selected: " + category.get(position),
+//                    Toast.LENGTH_SHORT
+//                ).show()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 

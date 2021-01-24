@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -80,19 +79,21 @@ class DashboardFragment : Fragment() {
             loadDataToRCView()
         })
 
-        this.dashboardViewModel.fetchDashboardDetailsStatusLiveData.observe(
-            requireActivity(),
-            Observer {
-                Toast.makeText(
-                    activity,
-                    "Dashboard data called successfully " + it,
-                    Toast.LENGTH_SHORT
-                )
-                    .show();
-                // findNavController().navigate(R.id.navigation_home)
-
-
-            })
+//        this.dashboardViewModel.fetchDashboardDetailsStatusLiveData.observe(
+//            requireActivity(),
+//            Observer {
+//
+//                if(it) {
+//                    Toast.makeText(
+//                        activity,
+//                        "Dashboard data called successfully " + it,
+//                        Toast.LENGTH_SHORT
+//                    )
+//                        .show();
+//                    // findNavController().navigate(R.id.navigation_home)
+//
+//                }
+//            })
     }
 
     fun loadDataToRCView() {

@@ -45,7 +45,9 @@ class CustomerDashboardFragment : Fragment() {
         super.onResume()
         val navigationSpinner = activity?.findViewById<Spinner>(R.id.spinner_nav)
         navigationSpinner?.visibility = View.INVISIBLE
-
+        this.customerDashboardViewModel.fetchCustomerDashboardDetails(custId)
+        this.customerDashboardViewModel.makePaymentEvent?.value = false
+        this.customerDashboardViewModel.receivePaymentEvent?.value = false
     }
 
     override fun onCreateView(
@@ -54,14 +56,13 @@ class CustomerDashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         custId = arguments?.getString("custid").toString()
-
+        custName = arguments?.getString("custName").toString()
 
 
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_customer_dashboard, container, false
         )
-
 
 
 
@@ -85,14 +86,17 @@ class CustomerDashboardFragment : Fragment() {
         this.customerDashboardViewModel?.progressDialog?.observe(this, Observer {
             if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
         })
-        this.customerDashboardViewModel.fetchCustomerDashboardDetails(custId)
+
 
         this.customerDashboardViewModel?.makePaymentEvent?.observe(requireActivity(), Observer {
             if (it) {
+
+                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
                 findNavController().navigate(
                     R.id.navigation_transaction, bundleOf(
                         Pair("custid", custId),
-                        Pair("type", "GAVE")
+                        Pair("type", "0"),
+                        Pair("custName", custName)
                     )
                 )
             }
@@ -100,12 +104,23 @@ class CustomerDashboardFragment : Fragment() {
 
         this.customerDashboardViewModel?.receivePaymentEvent?.observe(requireActivity(), Observer {
             if (it) {
+                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
                 findNavController().navigate(
                     R.id.navigation_transaction, bundleOf(
                         Pair("custid", custId),
-                        Pair("type", "GOT")
+                        Pair("type", "1"),
+                        Pair("custName", custName)
                     )
                 )
+            }
+        })
+
+        CustomerDashboardViewModel?.isTransactionPopupCalled?.observe(requireActivity(), Observer {
+            if (!it) {
+                this.customerDashboardViewModel.makePaymentEvent?.value = false
+                this.customerDashboardViewModel.receivePaymentEvent?.value = false
+
+                this.customerDashboardViewModel.fetchCustomerDashboardDetails(custId)
             }
         })
 

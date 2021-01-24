@@ -19,7 +19,8 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var amount: ObservableField<String>? = null
     var giveorgot: ObservableField<String>? = null
     var customerId: ObservableField<String>? = null
-    var CustomerPaymentStatus : MutableLiveData<Boolean> = MutableLiveData()
+    var CustomerPaymentStatus: MutableLiveData<Boolean> = MutableLiveData()
+    var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
     init {
@@ -29,37 +30,47 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
         this.giveorgot = ObservableField("")
         this.customerId = ObservableField("")
         CustomerPaymentStatus.value = false
+        //this.amount!!.set("0")
     }
 
     fun createPayment() {
-        progressDialog?.value = true
-        var request = this.amount?.get()?.let {
-            CreatePaymentRequest(
-                parseInt(it),
-                AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
-                this.customerId?.get().toString(),
-                this.giveorgot?.get().toString()
-            )
-        }
 
-        if (request != null) {
-            this.retrofitRepository.createPayment(request, object : IAPICallback<Any?, ErrorData?> {
-                override fun onResponseSuccess(responseData: Any?) {
+        if (this.amount?.get()?.length!! > 0) {
+            progressDialog?.value = true
+            var request = this.amount?.get()?.let {
+                CreatePaymentRequest(
+                    parseInt(it),
+                    AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
+                    this.customerId?.get().toString(),
+                    this.giveorgot?.get().toString()
+                )
+            }
 
-                    progressDialog?.value = false
-                    var response: CreatePaymentResponse? = responseData as CreatePaymentResponse
+            if (request != null) {
+                this.retrofitRepository.createPayment(
+                    request,
+                    object : IAPICallback<Any?, ErrorData?> {
+                        override fun onResponseSuccess(responseData: Any?) {
 
-                    response.let {
-                        CustomerPaymentStatus.value = true
-                    }
-                }
+                            progressDialog?.value = false
+                            var response: CreatePaymentResponse? =
+                                responseData as CreatePaymentResponse
 
-                override fun onResponseFailure(failureData: ErrorData?) {
-                    progressDialog?.value = false
+                            response.let {
+                                CustomerPaymentStatus.value = true
+                            }
+                        }
 
-                }
+                        override fun onResponseFailure(failureData: ErrorData?) {
+                            progressDialog?.value = false
+                            CustomerPaymentStatus.value = false
 
-            })
+                        }
+
+                    })
+            }
+        } else {
+            var errorData = ErrorData("123", "Invalid amount");
         }
     }
 }

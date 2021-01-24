@@ -41,11 +41,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
+                android:scaleX=".8"
+                android:scaleY=".8"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:theme="@style/RatingBar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"/>
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout3" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/constraintLayout3"

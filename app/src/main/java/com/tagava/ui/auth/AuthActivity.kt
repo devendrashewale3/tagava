@@ -2,7 +2,10 @@ package com.tagava.ui.auth
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -25,6 +28,11 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.colorApp))
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_auth)
 
         customeProgressDialog = CustomeProgressDialog(this)
@@ -32,6 +40,7 @@ class AuthActivity : AppCompatActivity() {
         initViewModel()
 
         register_textView.setOnClickListener {
+            finish()
             var intent = Intent(this@AuthActivity, RegisterActivity::class.java);
             startActivity(intent)
         }
@@ -53,6 +62,7 @@ class AuthActivity : AppCompatActivity() {
         authViewModel.loginDataLiveData.observe(this, Observer {
            // Toast.makeText(this@AuthActivity, "The OTP is " + it, Toast.LENGTH_SHORT).show();
             if (it) {
+                finish()
                 var intent = Intent(this@AuthActivity, OTPActivity::class.java);
                 startActivity(intent)
             }

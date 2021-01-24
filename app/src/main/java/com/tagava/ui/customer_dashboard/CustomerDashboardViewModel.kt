@@ -36,6 +36,11 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
         this.progressDialog = SingleLiveEvent<Boolean>()
         this.makePaymentEvent = MutableLiveData()
         this.receivePaymentEvent = MutableLiveData()
+
+    }
+
+    companion object {
+        var isTransactionPopupCalled: MutableLiveData<Boolean>? = MutableLiveData()
     }
 
     fun makePayment() {

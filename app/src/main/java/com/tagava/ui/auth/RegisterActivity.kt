@@ -47,6 +47,7 @@ class RegisterActivity : AppCompatActivity() {
         registerViewModel.registrationStatusLiveData.observe(this, Observer {
             Toast.makeText(this@RegisterActivity, "The status is " + it, Toast.LENGTH_SHORT).show();
             if (it) {
+                finish()
                 var intent = Intent(this@RegisterActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }
