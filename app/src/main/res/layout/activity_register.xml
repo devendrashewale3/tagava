@@ -15,19 +15,19 @@
     android:background="#fff"
     tools:context=".ui.auth.RegisterActivity">
 
-    <!--    <AutoCompleteTextView-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
-    <!--        app:layout_constraintRight_toRightOf="parent"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:id="@+id/login_title"-->
-    <!--        android:text="@string/register"-->
-    <!--        android:textSize="24dp"-->
-    <!--        android:layout_marginTop="16dp"/>-->
+    <AutoCompleteTextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_title"
+        android:text="Business Registration"
+        android:textSize="24dp"
+        android:layout_marginTop="16dp" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:hint="Enter name "

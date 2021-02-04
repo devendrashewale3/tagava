@@ -21,9 +21,8 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        supportActionBar?.title = "Register"
         binding = DataBindingUtil.setContentView(this, R.layout.activity_register)
+
         customeProgressDialog = CustomeProgressDialog(this)
 
         initViewModel()

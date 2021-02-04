@@ -142,7 +142,8 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             app:defaultQueryHint="6 customers"
-            app:queryHint="6 customers"
+            app:queryHint="@{viewmodelDashboard.customerName}"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

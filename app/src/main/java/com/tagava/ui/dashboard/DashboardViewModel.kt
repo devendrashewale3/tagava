@@ -33,7 +33,7 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
         progressDialog?.value = true
         var request = DashaboardDetailsRequest(
             AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
-            "",
+            this.customerName?.get().toString(),
             ""
         )
 

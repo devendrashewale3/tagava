@@ -7,8 +7,6 @@ import retrofit2.http.*
 
 interface APIService {
 
-    @GET("jet2/api/v1/blogs")
-    fun fetchArticles(@Query("page") page: Long, @Query("limit") limit: Long = 10): Call<Article>
 
     @Headers(
         value = ["Accept: application/json",
