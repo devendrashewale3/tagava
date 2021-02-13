@@ -64,10 +64,7 @@ class CustomerDashboardFragment : Fragment() {
             R.layout.fragment_customer_dashboard, container, false
         )
 
-
-
         initViewModel()
-
         return binding?.root
 
     }
@@ -77,15 +74,17 @@ class CustomerDashboardFragment : Fragment() {
 
         var customerDashboardViewModelFactory = CustomerDashboardViewModelFactory()
         this.customerDashboardViewModel =
-            activity?.let {
-                ViewModelProviders.of(it, customerDashboardViewModelFactory)
-                    .get(CustomerDashboardViewModel::class.java)
-            }!!
+                activity?.let {
+                    ViewModelProviders.of(it, customerDashboardViewModelFactory)
+                            .get(CustomerDashboardViewModel::class.java)
+                }!!
         binding?.viewmodelCustomerDashboard = this.customerDashboardViewModel
 
         this.customerDashboardViewModel?.progressDialog?.observe(this, Observer {
             if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
         })
+
+        //  this.customerDashboardViewModel?.ratingString?.set(3.5f)
 
 
         this.customerDashboardViewModel?.makePaymentEvent?.observe(requireActivity(), Observer {
@@ -93,7 +92,7 @@ class CustomerDashboardFragment : Fragment() {
 
                 CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
                 findNavController().navigate(
-                    R.id.navigation_transaction, bundleOf(
+                        R.id.navigation_transaction, bundleOf(
                         Pair("custid", custId),
                         Pair("type", "0"),
                         Pair("custName", custName)
@@ -119,7 +118,6 @@ class CustomerDashboardFragment : Fragment() {
             if (!it) {
                 this.customerDashboardViewModel.makePaymentEvent?.value = false
                 this.customerDashboardViewModel.receivePaymentEvent?.value = false
-
                 this.customerDashboardViewModel.fetchCustomerDashboardDetails(custId)
             }
         })

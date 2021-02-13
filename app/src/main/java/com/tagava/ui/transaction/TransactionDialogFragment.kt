@@ -1,9 +1,12 @@
 package com.tagava.ui.transaction
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.RatingBar
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
@@ -78,18 +81,25 @@ class TransactionDialogFragment : DialogFragment() {
 
         transactionDialogViewModel.amount?.set("")
 
+
         transactionDialogViewModel.CustomerPaymentStatus.observe(requireActivity(), Observer {
             if (it) {
                 lifecycleScope.launchWhenResumed {
                     val bundle = bundleOf(
-                        Pair("custid", custId),
-                        Pair("custName", custName)
+                            Pair("custid", custId),
+                            Pair("custName", custName)
                     )
 
                     CustomerDashboardViewModel?.isTransactionPopupCalled?.value = false
-                    findNavController().popBackStack()
-
+                    //       findNavController().popBackStack()
+                    showDialog()
                 }
+            }
+        })
+
+        transactionDialogViewModel.RatingStatus.observe(requireActivity(), Observer {
+            if (it) {
+                findNavController().popBackStack()
             }
         })
 
@@ -98,6 +108,26 @@ class TransactionDialogFragment : DialogFragment() {
             Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
 
         })
+    }
+
+
+    private fun showDialog() {
+        val dialog = Dialog(activity)
+        dialog.setTitle("Rating")
+        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.rating_dialog_logout)
+
+        var submitBtn: Button = dialog.findViewById(R.id.submit_button)
+        var ratingString: RatingBar = dialog.findViewById(R.id.rating_transaction_view)
+        submitBtn.setOnClickListener {
+            var value = ratingString.rating.toInt()
+            transactionDialogViewModel.giveRatings(value.toString())
+            dialog.dismiss()
+            // findNavController().popBackStack()
+        }
+        dialog.show()
+
     }
 
 }

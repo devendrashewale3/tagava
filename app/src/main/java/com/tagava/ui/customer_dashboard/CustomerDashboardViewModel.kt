@@ -21,6 +21,7 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var custId: ObservableField<String>? = null
     var totalAmtGive: ObservableField<String>? = null
     var totalAmtGot: ObservableField<String>? = null
+    var ratingString: ObservableField<Float>? = null
     var makePaymentEvent: MutableLiveData<Boolean>? = null
     var receivePaymentEvent: MutableLiveData<Boolean>? = null
     var customersDataLiveData: MutableLiveData<List<Entry>> = MutableLiveData()
@@ -33,6 +34,7 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
         this.custId = ObservableField("")
         this.totalAmtGive = ObservableField("")
         this.totalAmtGot = ObservableField("")
+        this.ratingString = ObservableField()
         this.progressDialog = SingleLiveEvent<Boolean>()
         this.makePaymentEvent = MutableLiveData()
         this.receivePaymentEvent = MutableLiveData()
@@ -55,9 +57,10 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
     fun fetchCustomerDashboardDetails(customerId: String) {
         progressDialog?.value = true
         var request = DashaboardDetailsRequest(
-            AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
-            "",
-            customerId
+                AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
+                "",
+                "",
+                customerId
 
         )
 
@@ -75,16 +78,21 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
                             customersDataLiveData.value = response?.data?.get(0)?.entries
                             var totalGive = 0
                             var totalGot = 0
+                            var ratingNum: Float = 0.0f
 
                             customersDataLiveData?.value?.forEach {
                                 if (it.gaveOrGot.equals("GAVE"))
                                     totalGive += it.gaveOrGotAmount
                                 else
                                     totalGot += it.gaveOrGotAmount
-
+                                if (it.rating.length > 0)
+                                    ratingNum += it.rating.toFloat()
                             }
+
+                            var ratingStringCal: Float = (ratingNum / (response?.data?.get(0)?.entries?.size!!)).toFloat()
                             totalAmtGive?.set(totalGive.toString())
                             totalAmtGot?.set(totalGot.toString())
+                            ratingString?.set(ratingStringCal)
 
 
                             Log.d("CustomerDashboardRes", response.toString())

@@ -234,9 +234,10 @@ class RetrofitRepository {
 
 
         val call: Call<DashboardResponse> = apiService.fetchDashboardDetailsAPI(
-            headerMap,
-            request.businessId,
-            request.searchByNameOrMobile
+                headerMap,
+                request.businessId,
+                request.searchByNameOrMobile,
+                "all"
         )
         call.enqueue(object : Callback<DashboardResponse?> {
             override fun onFailure(call: Call<DashboardResponse?>, t: Throwable) {
@@ -386,6 +387,45 @@ class RetrofitRepository {
                     val addCustomerError = createPaymentResponse?.error?.get(0)
                     Log.e("error ", response.errorBody().toString())
                     iapiCallback.onResponseFailure(addCustomerError as ErrorData?)
+                }
+            }
+
+        })
+    }
+
+    fun rateTransaction(request: RatingRequest, iapiCallback: IAPICallback<Any?, ErrorData?>) {
+        var token = "Bearer " + AuthViewModel.authTokenDataLiveData.value.toString()
+        val headerMap: HashMap<kotlin.String, kotlin.String> = HashMap()
+        headerMap["Authorization"] = token
+
+        headerMap["ContentType"] = "Application/json"
+
+
+        val call: Call<RatingResponse> = apiService.rateTransactionAPI(headerMap, request)
+        call.enqueue(object : Callback<RatingResponse?> {
+            override fun onFailure(call: Call<RatingResponse?>, t: Throwable) {
+                val error = ErrorData("error", "Generic error")
+                iapiCallback.onResponseFailure(error)
+            }
+
+            override fun onResponse(
+                    call: Call<RatingResponse?>,
+                    response: Response<RatingResponse?>
+            ) {
+
+
+                if (response.isSuccessful()) {
+                    val ratingResponse: RatingResponse? = response.body()
+                    Log.d(
+                            "Response",
+                            String.valueOf(ratingResponse?.toString())
+                    )
+                    iapiCallback.onResponseSuccess(ratingResponse)
+                } else {
+                    val ratingResponse: RatingResponse? = response.body()
+                    val ratingError = ratingResponse?.error?.get(0)
+                    Log.e("error ", response.errorBody().toString())
+                    iapiCallback.onResponseFailure(ratingError as ErrorData?)
                 }
             }
 

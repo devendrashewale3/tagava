@@ -44,9 +44,10 @@ interface APIService {
 
     @GET("dashboard/business")
     fun fetchDashboardDetailsAPI(
-        @HeaderMap headerMap: HashMap<String, String>,
-        @Query("businessId") businessId: String,
-        @Query("searsearchByNameOrMobile") searsearchByNameOrMobile: String
+            @HeaderMap headerMap: HashMap<String, String>,
+            @Query("businessId") businessId: String,
+            @Query("searchByNameOrMobile") searchByNameOrMobile: String,
+            @Query("filterBy") filterBy: String
     ): Call<DashboardResponse>
 
     @GET("dashboard/customer")
@@ -62,8 +63,14 @@ interface APIService {
 
     @POST("transaction/create")
     fun createPaymentAPI(
-        @HeaderMap authHeader: Map<String, String>,
-        @Body request: CreatePaymentRequest
+            @HeaderMap authHeader: Map<String, String>,
+            @Body request: CreatePaymentRequest
     ): Call<CreatePaymentResponse>
+
+    @POST("transaction/rating")
+    fun rateTransactionAPI(
+            @HeaderMap headerMap: HashMap<String, String>,
+            @Body request: RatingRequest
+    ): Call<RatingResponse>
 
 }

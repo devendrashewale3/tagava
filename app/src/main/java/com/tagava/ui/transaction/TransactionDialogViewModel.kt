@@ -4,9 +4,7 @@ package com.tagava.ui.transaction
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.tagava.data.CreatePaymentRequest
-import com.tagava.data.CreatePaymentResponse
-import com.tagava.data.ErrorData
+import com.tagava.data.*
 import com.tagava.repository.IAPICallback
 import com.tagava.repository.RetrofitRepository
 import com.tagava.ui.auth.AuthViewModel
@@ -19,7 +17,9 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var amount: ObservableField<String>? = null
     var giveorgot: ObservableField<String>? = null
     var customerId: ObservableField<String>? = null
+    var transactionID: MutableLiveData<String> = MutableLiveData()
     var CustomerPaymentStatus: MutableLiveData<Boolean> = MutableLiveData()
+    var RatingStatus: MutableLiveData<Boolean> = MutableLiveData()
     var errorData: MutableLiveData<ErrorData> = MutableLiveData()
 
 
@@ -57,6 +57,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
                                 responseData as CreatePaymentResponse
 
                             response.let {
+                                transactionID.value = response?.data?.get(0)?.transactionId
                                 CustomerPaymentStatus.value = true
                             }
                         }
@@ -71,6 +72,41 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
             }
         } else {
             var errorData = ErrorData("123", "Invalid amount");
+        }
+    }
+
+    fun giveRatings(rating_string: String) {
+        progressDialog?.value = true
+        var request = this.amount?.get()?.let {
+            RatingRequest(
+                    rating_string,
+                    transactionID.value.toString()
+            )
+        }
+
+        if (request != null) {
+            this.retrofitRepository.rateTransaction(
+                    request,
+                    object : IAPICallback<Any?, ErrorData?> {
+                        override fun onResponseSuccess(responseData: Any?) {
+
+                            progressDialog?.value = false
+                            RatingStatus?.value = true
+                            var response: RatingResponse? =
+                                    responseData as RatingResponse
+
+                            response.let {
+
+                            }
+                        }
+
+                        override fun onResponseFailure(failureData: ErrorData?) {
+                            progressDialog?.value = false
+                            RatingStatus?.value = false
+
+                        }
+
+                    })
         }
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -49,11 +50,25 @@ class DashboardFragment : Fragment() {
         //  val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_dashboard, container, false
+                inflater,
+                R.layout.fragment_dashboard, container, false
         )
 
+        binding?.root?.searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //Log.e("onQueryTextChange", "called");
+                return false
+            }
 
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+                dashboardViewModel.customerName?.set(query)
+
+                dashboardViewModel.fetchDashboardDetails()
+                // Do your task here
+                return false
+            }
+        })
         initViewModel()
         return binding?.root
     }
