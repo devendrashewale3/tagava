@@ -60,8 +60,8 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
                 AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
                 "",
                 "",
-                customerId
-
+                customerId,
+                ""
         )
 
         if (request != null) {

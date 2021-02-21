@@ -1,5 +1,6 @@
 package com.tagava.ui.dashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.R
 import com.tagava.data.Content
 import com.tagava.databinding.FragmentDashboardBinding
+import com.tagava.ui.auth.AuthViewModel
 import com.tagava.util.CustomeProgressDialog
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
@@ -78,15 +80,23 @@ class DashboardFragment : Fragment() {
 
         var dashboardViewModelFactory = DashboardViewModelFactory()
         this.dashboardViewModel =
-            activity?.let {
-                ViewModelProviders.of(it, dashboardViewModelFactory)
-                    .get(DashboardViewModel::class.java)
-            }!!
+                activity?.let {
+                    ViewModelProviders.of(it, dashboardViewModelFactory)
+                            .get(DashboardViewModel::class.java)
+                }!!
         binding?.viewmodelDashboard = this.dashboardViewModel
 
         this.dashboardViewModel?.progressDialog?.observe(this, Observer {
             if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
         })
+
+        val sharedPreference = activity?.getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
+        var bid: String? = sharedPreference?.getString("bid", "")
+        if (!bid.isNullOrEmpty()) {
+            bid?.let {
+                AuthViewModel.businessSelectedIDDataLiveData.value = it
+            }
+        }
         this.dashboardViewModel.fetchDashboardDetails()
 
         this.dashboardViewModel?.customersDataLiveData.observe(requireActivity(), Observer {

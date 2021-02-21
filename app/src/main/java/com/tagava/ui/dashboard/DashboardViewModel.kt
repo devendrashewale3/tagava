@@ -20,12 +20,18 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
     var customersDataLiveData: MutableLiveData<List<Content>> = MutableLiveData()
     var customerName: ObservableField<String>? = null
     var mobileNumber: ObservableField<String>? = null
+    var sortByFilter: ObservableField<String>? = null
+    var getAmount: ObservableField<String>? = null
+    var giveAmount: ObservableField<String>? = null
 
 
     init {
         this.retrofitRepository = retrofitRepository
         this.customerName = ObservableField("")
         this.mobileNumber = ObservableField("")
+        this.getAmount = ObservableField("")
+        this.giveAmount = ObservableField("")
+        this.sortByFilter = ObservableField("most_recent")
         this.progressDialog = SingleLiveEvent<Boolean>()
     }
 
@@ -35,7 +41,8 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
                 AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
                 this.customerName?.get().toString(),
                 "all",
-                ""
+                "",
+                sortByFilter?.get().toString()
         )
 
         if (request != null) {
@@ -47,6 +54,8 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
 
                     response.let {
                         customersDataLiveData.value = response?.data?.get(0)?.customers?.content
+                        getAmount?.set("Rs " + response?.data?.get(0)?.getAmount.toString())
+                        giveAmount?.set("Rs " + response?.data?.get(0)?.giveAmount.toString())
                         fetchDashboardDetailsStatusLiveData.value = true
                     }
                 }
@@ -59,5 +68,16 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
             })
         }
     }
+
+    fun fetchDashboardDetailsBySortBy() {
+
+        if (this.sortByFilter?.get().equals("most_recent"))
+            this.sortByFilter?.set("")
+        else
+            this.sortByFilter?.set("most_recent")
+
+        fetchDashboardDetails()
+    }
+
 
 }

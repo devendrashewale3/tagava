@@ -124,17 +124,24 @@ class SplashViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 var response: BusinessAllResponse? = responseData as BusinessAllResponse
 
                 response.let {
-                    AuthViewModel.businessSelectedIDDataLiveData.value =
-                        response?.data?.get(0)?.businessId
+                    //  AuthViewModel.businessSelectedIDDataLiveData.value =
+                    //      response?.data?.get(0)?.businessId
                     AuthViewModel.businessIDDataLiveData.value = response?.data
                     businessDataFetchStatus.value = true
                 }
             }
 
             override fun onResponseFailure(failureData: ErrorData?) {
-                errorData.value = failureData
-                progressDialog?.value = false
-                businessDataFetchStatus.value = false
+                try {
+                    errorData.value = failureData
+                    progressDialog?.value = false
+                    businessDataFetchStatus.value = false
+                } catch (e: Exception) {
+                    val error = ErrorData("error", "Generic error")
+                    errorData.value = error
+                    progressDialog?.value = false
+                    businessDataFetchStatus.value = false
+                }
             }
 
         })

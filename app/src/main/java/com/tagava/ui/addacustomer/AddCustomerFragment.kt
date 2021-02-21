@@ -54,9 +54,11 @@ class AddCustomerFragment : Fragment() {
 
 
         addCustomerViewModel.addCustomerStausStatusLiveData.observe(requireActivity(), Observer {
-            Toast.makeText(activity, "Customer added successfully " + it, Toast.LENGTH_SHORT)
-                .show();
-            findNavController().navigate(R.id.navigation_home)
+            if (it) {
+                Toast.makeText(activity, "Customer added successfully " + it, Toast.LENGTH_SHORT)
+                        .show();
+                findNavController().navigate(R.id.navigation_home)
+            }
 
 
         })

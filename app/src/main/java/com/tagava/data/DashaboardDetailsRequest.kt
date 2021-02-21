@@ -7,6 +7,7 @@ data class DashaboardDetailsRequest(
         var businessId: String,
         var searchByNameOrMobile: String,
         var filterBy: String,
-        var customerId: String
+        var customerId: String,
+        var sortBy: String
 
 )

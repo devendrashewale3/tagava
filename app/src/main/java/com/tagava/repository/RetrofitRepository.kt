@@ -339,8 +339,8 @@ class RetrofitRepository {
                 if (response.isSuccessful()) {
                     val loginResponse: BusinessAllResponse? = response.body()
                     Log.d(
-                        "Response",
-                        String.valueOf(loginResponse?.toString())
+                            "Response",
+                            String.valueOf(loginResponse?.toString())
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {

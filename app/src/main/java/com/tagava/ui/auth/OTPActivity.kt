@@ -4,7 +4,10 @@ import `in`.aabhasjindal.otptextview.OTPListener
 import `in`.aabhasjindal.otptextview.OtpTextView
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -25,7 +28,11 @@ class OTPActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.setStatusBarColor(resources.getColor(R.color.colorApp))
+        }
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp)
 
         customeProgressDialog = CustomeProgressDialog(this)
@@ -79,13 +86,15 @@ class OTPActivity : AppCompatActivity() {
         AuthViewModel.businessSelectedIDDataLiveData.observe(this, Observer {
             val sharedPreference =  getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
             var editor = sharedPreference.edit()
-            editor.putString("bid",it)
+            if (sharedPreference.getString("bid", "").length != 0)
+                editor.putString("bid", it)
             editor.commit()
         })
 
         authViewModel.businessDataFetchStatus.observe(this, Observer {
             if (it) {
                 finish()
+
                 var intent = Intent(this@OTPActivity, DashboardActivity::class.java);
                 startActivity(intent)
             }

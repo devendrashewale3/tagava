@@ -60,7 +60,7 @@
                         android:gravity="center|bottom"
                         android:textColor="#2EB975"
                         android:textSize="21sp"
-                        android:text=" Rs 20000" />
+                        android:text="@={viewmodelDashboard.giveAmount}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                         android:gravity="center|bottom"
                         android:textColor="#F60534"
                         android:textSize="21sp"
-                        android:text=" Rs 20000" />
+                        android:text="@={viewmodelDashboard.getAmount}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -139,22 +139,26 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
-            android:layout_width="300dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             app:defaultQueryHint="6 customers"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/react"
             app:queryHint="@{viewmodelDashboard.customerName}"
-
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/filterIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/filterIcon"
-            android:layout_height="40dp"
-            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_width="45dp"
             android:padding="5dp"
-            android:src="@drawable/filter"
+            android:src="@drawable/sort_icon"
             app:layout_constraintEnd_toStartOf="@+id/pdfIcon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/searchView"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{()->viewmodelDashboard.fetchDashboardDetailsBySortBy()}" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/pdfIcon"

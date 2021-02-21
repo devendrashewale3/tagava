@@ -50,7 +50,7 @@ class Recycler_View_Adapter(
         var color =
             (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
         drawable.setColor(color)
-        animate(holder)
+       // animate(holder)
         val bundle = bundleOf(
             Pair("custid", list[position].customerId),
             Pair("custName", list[position].customerName)

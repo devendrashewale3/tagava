@@ -42,7 +42,7 @@ class Recycler_CustomerView_Adapter(
 //        var color =
 //            (Color.argb(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)))
 //        drawable.setColor(color)
-        animate(holder)
+        //      animate(holder)
 //        holder.itemView.setOnClickListener(
 //            Navigation.createNavigateOnClickListener(R.id.navigation_customer_dashboard)
 //        )

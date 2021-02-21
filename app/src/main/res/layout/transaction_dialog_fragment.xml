@@ -14,9 +14,21 @@
         android:padding="15dp"
         android:background="#fff">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="Payment"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:layout_marginTop="4dp" />
+
 
         <androidx.appcompat.widget.AppCompatEditText
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_text"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:hint="Enter amount "
@@ -40,9 +52,21 @@
             android:id="@+id/date_input"
             android:layout_marginTop="20dp" />
 
+        <androidx.appcompat.widget.AppCompatCheckBox
+            app:layout_constraintTop_toBottomOf="@+id/date_input"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:hint="Includes GST"
+            android:textColor="#000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gst_checkbox"
+            android:button="@drawable/custom_checkbox"
+            android:layout_marginTop="20dp" />
+
 
         <Button
-            app:layout_constraintTop_toBottomOf="@+id/date_input"
+            app:layout_constraintTop_toBottomOf="@+id/gst_checkbox"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_width="match_parent"

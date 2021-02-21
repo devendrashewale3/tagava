@@ -81,8 +81,9 @@ class SplashActivity : AppCompatActivity() {
 
         splashViewModel.errorData.observe(this, Observer {
 
-            Toast.makeText(this@SplashActivity, it.message, Toast.LENGTH_LONG).show()
-
+            if (it != null)
+                Toast.makeText(this@SplashActivity, it.message, Toast.LENGTH_LONG).show()
+            goToAuthActivity()
         })
 
         val sharedPreference = getSharedPreferences("TAGAVA_PREFERENCES", Context.MODE_PRIVATE)
