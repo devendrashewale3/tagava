@@ -361,8 +361,12 @@ class RetrofitRepository {
 
         headerMap["ContentType"] = "Application/json"
 
+        val call: Call<CreatePaymentResponse>
+        if (request.otp.isNullOrEmpty())
+            call = apiService.createPaymentAPI(headerMap, request)
+        else
+            call = apiService.createPaymentVerifyAPI(headerMap, request)
 
-        val call: Call<CreatePaymentResponse> = apiService.createPaymentAPI(headerMap, request)
         call.enqueue(object : Callback<CreatePaymentResponse?> {
             override fun onFailure(call: Call<CreatePaymentResponse?>, t: Throwable) {
                 val error = ErrorData("error", "Generic error")
@@ -370,8 +374,8 @@ class RetrofitRepository {
             }
 
             override fun onResponse(
-                call: Call<CreatePaymentResponse?>,
-                response: Response<CreatePaymentResponse?>
+                    call: Call<CreatePaymentResponse?>,
+                    response: Response<CreatePaymentResponse?>
             ) {
 
 

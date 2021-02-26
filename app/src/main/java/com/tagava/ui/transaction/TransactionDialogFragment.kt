@@ -1,5 +1,7 @@
 package com.tagava.ui.transaction
 
+import `in`.aabhasjindal.otptextview.OTPListener
+import `in`.aabhasjindal.otptextview.OtpTextView
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RatingBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
@@ -23,6 +26,9 @@ import com.tagava.util.CustomeProgressDialog
 class TransactionDialogFragment : DialogFragment() {
 
 
+    private var transactionViewLayout: ConstraintLayout? = null
+    private var otpViewLayout: ConstraintLayout? = null
+    var otpTextView: OtpTextView? = null
     private lateinit var transactionDialogViewModel: TransactionDialogViewModel
 
     private var binding: TransactionDialogFragmentBinding? = null
@@ -32,8 +38,10 @@ class TransactionDialogFragment : DialogFragment() {
     var customeProgressDialog: CustomeProgressDialog? = null
     override fun onResume() {
         super.onResume()
-
         this.transactionDialogViewModel.CustomerPaymentStatus.value = false
+        this.transactionDialogViewModel.RatingStatus.value = false
+        this.transactionDialogViewModel.CustomerPaymentOTPGotStatus.value = false
+
     }
 
     override fun onCreateView(
@@ -41,14 +49,30 @@ class TransactionDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.transaction_dialog_fragment, container, false
+                inflater,
+                R.layout.transaction_dialog_fragment, container, false
         )
+        transactionViewLayout = binding?.root?.findViewById(R.id.transaction_view_layout)
+        otpViewLayout = binding?.root?.findViewById(R.id.otp_view_layout)
         customeProgressDialog = CustomeProgressDialog(requireContext())
 
         custId = arguments?.getString("custid")
         type = arguments?.getString("type")
         custName = arguments?.getString("custName")
+
+        otpTextView = binding?.root?.findViewById(R.id.otp_view)
+
+
+        otpTextView?.otpListener = object : OTPListener {
+            override fun onInteractionListener() {
+                otpTextView?.resetState()
+            }
+
+            override fun onOTPComplete(otp: String) {
+                //  Toast.makeText(this@OTPActivity, "The OTP is " + otp,  Toast.LENGTH_SHORT).show();
+                transactionDialogViewModel.otpText?.set(otp)
+            }
+        }
 
         initViewModel()
         return binding?.root
@@ -82,7 +106,7 @@ class TransactionDialogFragment : DialogFragment() {
         transactionDialogViewModel.amount?.set("")
 
 
-        transactionDialogViewModel.CustomerPaymentStatus.observe(requireActivity(), Observer {
+        transactionDialogViewModel.CustomerPaymentStatus.observe(viewLifecycleOwner, Observer {
             if (it) {
                 lifecycleScope.launchWhenResumed {
                     val bundle = bundleOf(
@@ -92,22 +116,33 @@ class TransactionDialogFragment : DialogFragment() {
 
                     CustomerDashboardViewModel?.isTransactionPopupCalled?.value = false
                     //       findNavController().popBackStack()
+                    transactionDialogViewModel.CustomerPaymentStatus.value = false
                     showDialog()
                 }
             }
         })
 
-        transactionDialogViewModel.RatingStatus.observe(requireActivity(), Observer {
+        transactionDialogViewModel.RatingStatus.observe(viewLifecycleOwner, Observer {
             if (it) {
+
                 findNavController().popBackStack()
             }
         })
 
-        this.transactionDialogViewModel.errorData.observe(requireActivity(), Observer {
+        this.transactionDialogViewModel.errorData.observe(viewLifecycleOwner, Observer {
 
             Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
 
         })
+
+        this.transactionDialogViewModel.CustomerPaymentOTPGotStatus.observe(viewLifecycleOwner,
+                Observer {
+                    if (it) {
+                        transactionViewLayout?.visibility = View.GONE
+                        otpViewLayout?.visibility = View.VISIBLE
+                        otpTextView?.requestFocusOTP()
+                    }
+                })
     }
 
 
@@ -129,5 +164,6 @@ class TransactionDialogFragment : DialogFragment() {
         dialog.show()
 
     }
+
 
 }

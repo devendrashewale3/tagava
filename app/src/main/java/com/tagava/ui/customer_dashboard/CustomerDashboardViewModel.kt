@@ -1,9 +1,13 @@
 package com.tagava.ui.customer_dashboard
 
 import android.util.Log
+import android.view.View
+import androidx.core.os.bundleOf
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation
+import com.tagava.R
 import com.tagava.data.CustomerDashboardResponse
 import com.tagava.data.DashaboardDetailsRequest
 import com.tagava.data.Entry
@@ -19,6 +23,7 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var retrofitRepository: RetrofitRepository
     var progressDialog: SingleLiveEvent<Boolean>? = null
     var custId: ObservableField<String>? = null
+    var custName: ObservableField<String>? = null
     var totalAmtGive: ObservableField<String>? = null
     var totalAmtGot: ObservableField<String>? = null
     var ratingString: ObservableField<Float>? = null
@@ -32,6 +37,7 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
     init {
         this.retrofitRepository = retrofitRepository
         this.custId = ObservableField("")
+        this.custName = ObservableField("")
         this.totalAmtGive = ObservableField("")
         this.totalAmtGot = ObservableField("")
         this.ratingString = ObservableField()
@@ -45,12 +51,24 @@ class CustomerDashboardViewModel(retrofitRepository: RetrofitRepository) : ViewM
         var isTransactionPopupCalled: MutableLiveData<Boolean>? = MutableLiveData()
     }
 
-    fun makePayment() {
-        this.makePaymentEvent?.value = true
+    fun makePayment(view: View) {
+        Navigation.findNavController(view).navigate(
+                R.id.navigation_transaction, bundleOf(
+                Pair("custid", custId?.get()),
+                Pair("type", "0"),
+                Pair("custName", custName?.get())
+        )
+        )
     }
 
-    fun receivePayment() {
-        this.receivePaymentEvent?.value = true
+    fun receivePayment(view: View) {
+        Navigation.findNavController(view).navigate(
+                R.id.navigation_transaction, bundleOf(
+                Pair("custid", custId?.get()),
+                Pair("type", "1"),
+                Pair("custName", custName?.get())
+        )
+        )
     }
 
 

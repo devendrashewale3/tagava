@@ -67,6 +67,12 @@ interface APIService {
             @Body request: CreatePaymentRequest
     ): Call<CreatePaymentResponse>
 
+    @POST("transaction/create/validate")
+    fun createPaymentVerifyAPI(
+            @HeaderMap authHeader: Map<String, String>,
+            @Body request: CreatePaymentRequest
+    ): Call<CreatePaymentResponse>
+
     @POST("transaction/rating")
     fun rateTransactionAPI(
             @HeaderMap headerMap: HashMap<String, String>,

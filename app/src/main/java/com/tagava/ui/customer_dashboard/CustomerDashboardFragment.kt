@@ -84,32 +84,37 @@ class CustomerDashboardFragment : Fragment() {
             if (it!!) customeProgressDialog?.show() else customeProgressDialog?.dismiss()
         })
 
+        this.customerDashboardViewModel.custId?.set(custId)
+        this.customerDashboardViewModel.custName?.set(custName)
+
         //  this.customerDashboardViewModel?.ratingString?.set(3.5f)
 
 
-        this.customerDashboardViewModel?.makePaymentEvent?.observe(requireActivity(), Observer {
-            if (it) {
-
-                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
-                findNavController().navigate(
-                        R.id.navigation_transaction, bundleOf(
-                        Pair("custid", custId),
-                        Pair("type", "0"),
-                        Pair("custName", custName)
-                    )
-                )
-            }
-        })
+//        this.customerDashboardViewModel?.makePaymentEvent?.observe(requireActivity(), Observer {
+//            if (it) {
+//
+//                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
+//                findNavController().navigate(
+//                        R.id.navigation_transaction, bundleOf(
+//                        Pair("custid", custId),
+//                        Pair("type", "0"),
+//                        Pair("custName", custName)
+//                    )
+//                )
+//
+//
+//            }
+//        })
 
         this.customerDashboardViewModel?.receivePaymentEvent?.observe(requireActivity(), Observer {
             if (it) {
                 CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
                 findNavController().navigate(
-                    R.id.navigation_transaction, bundleOf(
+                        R.id.navigation_transaction, bundleOf(
                         Pair("custid", custId),
                         Pair("type", "1"),
                         Pair("custName", custName)
-                    )
+                )
                 )
             }
         })

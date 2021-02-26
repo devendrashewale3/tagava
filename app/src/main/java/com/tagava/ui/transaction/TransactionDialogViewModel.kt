@@ -19,8 +19,10 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
     var customerId: ObservableField<String>? = null
     var transactionID: MutableLiveData<String> = MutableLiveData()
     var CustomerPaymentStatus: MutableLiveData<Boolean> = MutableLiveData()
+    var CustomerPaymentOTPGotStatus: MutableLiveData<Boolean> = MutableLiveData()
     var RatingStatus: MutableLiveData<Boolean> = MutableLiveData()
     var errorData: MutableLiveData<ErrorData> = MutableLiveData()
+    var otpText: ObservableField<String>? = null
 
 
     init {
@@ -29,6 +31,7 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
         this.amount = ObservableField("")
         this.giveorgot = ObservableField("")
         this.customerId = ObservableField("")
+        this.otpText = ObservableField("")
         CustomerPaymentStatus.value = false
         //this.amount!!.set("0")
     }
@@ -57,14 +60,18 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
                                 responseData as CreatePaymentResponse
 
                             response.let {
-                                transactionID.value = response?.data?.get(0)?.transactionId
-                                CustomerPaymentStatus.value = true
+                                if (response?.data?.get(0)?.isOtpSent != null && response?.data?.get(0)?.isOtpSent) {
+                                    CustomerPaymentOTPGotStatus.value = true
+                                } else {
+                                    CustomerPaymentOTPGotStatus.value = false
+                                }
+
                             }
                         }
 
                         override fun onResponseFailure(failureData: ErrorData?) {
                             progressDialog?.value = false
-                            CustomerPaymentStatus.value = false
+                            CustomerPaymentOTPGotStatus.value = false
 
                         }
 
@@ -109,4 +116,49 @@ class TransactionDialogViewModel(retrofitRepository: RetrofitRepository) : ViewM
                     })
         }
     }
+
+    fun createPaymentVerification() {
+        if (this.amount?.get()?.length!! > 0) {
+            progressDialog?.value = true
+            var request = this.amount?.get()?.let {
+                CreatePaymentRequest(
+                        parseInt(it),
+                        AuthViewModel.businessSelectedIDDataLiveData.value.toString(),
+                        this.customerId?.get().toString(),
+                        this.giveorgot?.get().toString(),
+                        otpText?.get().toString()
+                )
+            }
+
+            if (request != null) {
+                this.retrofitRepository.createPayment(
+                        request,
+                        object : IAPICallback<Any?, ErrorData?> {
+                            override fun onResponseSuccess(responseData: Any?) {
+
+                                progressDialog?.value = false
+                                var response: CreatePaymentResponse? =
+                                        responseData as CreatePaymentResponse
+
+                                response.let {
+                                    transactionID.value = response?.data?.get(0)?.transactionId
+                                    CustomerPaymentStatus.value = true
+
+
+                                }
+                            }
+
+                            override fun onResponseFailure(failureData: ErrorData?) {
+                                progressDialog?.value = false
+                                CustomerPaymentStatus.value = false
+
+                            }
+
+                        })
+            }
+        } else {
+            var errorData = ErrorData("123", "Invalid amount");
+        }
+    }
+
 }

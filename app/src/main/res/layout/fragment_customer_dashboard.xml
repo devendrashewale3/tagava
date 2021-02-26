@@ -244,7 +244,7 @@
             android:background="#F60534"
             android:textColor="@color/white"
             android:padding="5dp"
-            android:onClick="@{()-> viewmodelCustomerDashboard.makePayment()}"
+            android:onClick="@{(view)-> viewmodelCustomerDashboard.makePayment(view)}"
             app:layout_constraintEnd_toStartOf="@+id/btnReceivePayment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -258,7 +258,7 @@
             android:background="#2EB975"
             android:textColor="@color/white"
             android:padding="5dp"
-            android:onClick="@{()-> viewmodelCustomerDashboard.receivePayment()}"
+            android:onClick="@{(view)-> viewmodelCustomerDashboard.receivePayment(view)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnMakePayment"
             app:layout_constraintTop_toTopOf="parent" />

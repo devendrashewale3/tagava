@@ -142,6 +142,7 @@ class DashboardActivity : AppCompatActivity() {
 
     }
 
+
     private fun initViewModel() {
 
         var dashboardViewModelFactory = DashboardViewModelFactory()
