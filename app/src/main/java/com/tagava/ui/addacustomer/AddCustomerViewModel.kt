@@ -26,7 +26,6 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
         this.retrofitRepository = retrofitRepository
         this.customerName = ObservableField("")
         this.mobileNumber = ObservableField("")
-
         this.progressDialog = SingleLiveEvent<Boolean>()
     }
 
@@ -45,25 +44,45 @@ class AddCustomerViewModel(retrofitRepository: RetrofitRepository) : ViewModel()
         )
 
         if (request != null) {
-            this.retrofitRepository.addCustomer(request, object : IAPICallback<Any?, ErrorData?> {
-                override fun onResponseSuccess(responseData: Any?) {
 
-                    progressDialog?.value = false
-                    var response: RegisterResponse? = responseData as RegisterResponse
+//            if(request.businessId.isNullOrEmpty()){
+//                val failureData = ErrorData("err_business_empty","Please select valid business")
+//                errorData.value = failureData
+//                progressDialog?.value = false
+//                addCustomerStausStatusLiveData.value = false
+//            } else
+            if (request.name.isNullOrEmpty()) {
+                val failureData = ErrorData("err_mobile_empty", "Please enter valid name")
+                errorData.value = failureData
+                progressDialog?.value = false
+                addCustomerStausStatusLiveData.value = false
+            } else if (request.mobileNo.isNullOrEmpty()) {
+                val failureData = ErrorData("err_mobile_empty", "Please enter valid mobile number")
+                errorData.value = failureData
+                progressDialog?.value = false
+                addCustomerStausStatusLiveData.value = false
+            } else {
 
-                    response.let {
-                        //  authTokenDataLiveData.value = response?.data?.get(0)?.token
-                        addCustomerStausStatusLiveData.value = true
+                this.retrofitRepository.addCustomer(request, object : IAPICallback<Any?, ErrorData?> {
+                    override fun onResponseSuccess(responseData: Any?) {
+
+                        progressDialog?.value = false
+                        var response: RegisterResponse? = responseData as RegisterResponse
+
+                        response.let {
+                            //  authTokenDataLiveData.value = response?.data?.get(0)?.token
+                            addCustomerStausStatusLiveData.value = true
+                        }
                     }
-                }
 
-                override fun onResponseFailure(failureData: ErrorData?) {
-                    errorData.value = failureData
-                    progressDialog?.value = false
-                    addCustomerStausStatusLiveData.value = false
-                }
+                    override fun onResponseFailure(failureData: ErrorData?) {
+                        errorData.value = failureData
+                        progressDialog?.value = false
+                        addCustomerStausStatusLiveData.value = false
+                    }
 
-            })
+                })
+            }
         }
     }
 }

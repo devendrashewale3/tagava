@@ -13,8 +13,11 @@ class BusinessSpinnerAdapter(context: Context?, var dataSourceList: List<Busines
     var dataSource: ArrayList<BusinessData>? = null
 
     init {
-        var footer = BusinessData("footer", "New Business")
         dataSource = dataSourceList as ArrayList<BusinessData>?
+//        var all= BusinessData("","All")
+//        dataSource?.add(0,all)
+        var footer = BusinessData("footer", "New Business")
+
         dataSource?.add(footer)
     }
 

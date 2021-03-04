@@ -21,16 +21,21 @@ class AddCustomerFragment : Fragment() {
     var binding: FragmentAddcustomerBinding? = null
     var customeProgressDialog: CustomeProgressDialog? = null
 
+    override fun onResume() {
+        super.onResume()
+        addCustomerViewModel.addCustomerStausStatusLiveData.value = false
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_addcustomer, container, false
+                inflater,
+                R.layout.fragment_addcustomer, container, false
         )
+        customeProgressDialog = CustomeProgressDialog(requireActivity())
 
 
         initViewModel()
@@ -53,20 +58,25 @@ class AddCustomerFragment : Fragment() {
         })
 
 
-        addCustomerViewModel.addCustomerStausStatusLiveData.observe(requireActivity(), Observer {
+        addCustomerViewModel.addCustomerStausStatusLiveData.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Toast.makeText(activity, "Customer added successfully " + it, Toast.LENGTH_SHORT)
                         .show();
+                addCustomerViewModel.customerName?.set("")
+                addCustomerViewModel.mobileNumber?.set("")
+                addCustomerViewModel.addCustomerStausStatusLiveData.value = false
                 findNavController().navigate(R.id.navigation_home)
             }
 
 
         })
 
-        addCustomerViewModel.errorData.observe(requireActivity(), Observer {
+        addCustomerViewModel.errorData.observe(viewLifecycleOwner, Observer {
 
-            Toast.makeText(requireContext(),it.message,Toast.LENGTH_LONG).show()
-
+            if (it.code.equals("CS-INV-MB-003"))
+                Toast.makeText(requireContext(), "Customer already added with same number.", Toast.LENGTH_LONG).show()
+            else
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
         })
     }
 

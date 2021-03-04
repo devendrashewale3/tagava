@@ -6,12 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tagava.R
 import com.tagava.data.Entry
@@ -63,7 +61,6 @@ class CustomerDashboardFragment : Fragment() {
             inflater,
             R.layout.fragment_customer_dashboard, container, false
         )
-
         initViewModel()
         return binding?.root
 
@@ -106,18 +103,18 @@ class CustomerDashboardFragment : Fragment() {
 //            }
 //        })
 
-        this.customerDashboardViewModel?.receivePaymentEvent?.observe(requireActivity(), Observer {
-            if (it) {
-                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
-                findNavController().navigate(
-                        R.id.navigation_transaction, bundleOf(
-                        Pair("custid", custId),
-                        Pair("type", "1"),
-                        Pair("custName", custName)
-                )
-                )
-            }
-        })
+//        this.customerDashboardViewModel?.receivePaymentEvent?.observe(requireActivity(), Observer {
+//            if (it) {
+//                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = true
+//                findNavController().navigate(
+//                        R.id.navigation_transaction, bundleOf(
+//                        Pair("custid", custId),
+//                        Pair("type", "1"),
+//                        Pair("custName", custName)
+//                )
+//                )
+//            }
+//        })
 
         CustomerDashboardViewModel?.isTransactionPopupCalled?.observe(requireActivity(), Observer {
             if (!it) {

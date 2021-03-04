@@ -102,10 +102,16 @@ class DashboardActivity : AppCompatActivity() {
 
             navigationSpinner.adapter = spinnerAdapter
 
-            buisnessData.forEachIndexed { index, element ->
-                if (AuthViewModel.businessSelectedIDDataLiveData.value?.equals(element.businessId)!!) {
-                    navigationSpinner.setSelection(index)
-                    flag = true
+            buisnessData?.let {
+                it.forEachIndexed { index, element ->
+
+                    element.businessId?.let { bid ->
+                        if (AuthViewModel.businessSelectedIDDataLiveData.value?.equals(bid)!!) {
+                            navigationSpinner.setSelection(index)
+                            flag = true
+                        }
+                    }
+
                 }
             }
             navigationSpinner.onItemSelectedListener = object : OnItemSelectedListener {

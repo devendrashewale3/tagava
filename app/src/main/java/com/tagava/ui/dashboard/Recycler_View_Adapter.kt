@@ -41,7 +41,7 @@ class Recycler_View_Adapter(
         holder.amountTextView.text = list[position].amount.toString()
         holder.amountDescTextView.text = list[position].getOrGiveMsg
 
-        if (list[position].getOrGiveMsg.equals("give"))
+        if (list[position].getOrGiveMsg.contains("give"))
             holder.amountTextView.setTextColor(Color.RED)
         else
             holder.amountTextView.setTextColor(Color.GREEN)

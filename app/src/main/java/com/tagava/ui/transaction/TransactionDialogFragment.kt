@@ -16,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.tagava.R
 import com.tagava.databinding.TransactionDialogFragmentBinding
@@ -108,24 +107,26 @@ class TransactionDialogFragment : DialogFragment() {
 
         transactionDialogViewModel.CustomerPaymentStatus.observe(viewLifecycleOwner, Observer {
             if (it) {
-                lifecycleScope.launchWhenResumed {
                     val bundle = bundleOf(
                             Pair("custid", custId),
                             Pair("custName", custName)
                     )
 
-                    CustomerDashboardViewModel?.isTransactionPopupCalled?.value = false
-                    //       findNavController().popBackStack()
-                    transactionDialogViewModel.CustomerPaymentStatus.value = false
+
                     showDialog()
                 }
-            }
+
         })
 
         transactionDialogViewModel.RatingStatus.observe(viewLifecycleOwner, Observer {
             if (it) {
+                this.transactionDialogViewModel.CustomerPaymentStatus.value = false
+                this.transactionDialogViewModel.RatingStatus.value = false
+                this.transactionDialogViewModel.CustomerPaymentOTPGotStatus.value = false
+                CustomerDashboardViewModel?.isTransactionPopupCalled?.value = false
 
                 findNavController().popBackStack()
+
             }
         })
 
@@ -157,6 +158,7 @@ class TransactionDialogFragment : DialogFragment() {
         var ratingString: RatingBar = dialog.findViewById(R.id.rating_transaction_view)
         submitBtn.setOnClickListener {
             var value = ratingString.rating.toInt()
+            transactionDialogViewModel.CustomerPaymentStatus.value = false
             transactionDialogViewModel.giveRatings(value.toString())
             dialog.dismiss()
             // findNavController().popBackStack()

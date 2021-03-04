@@ -76,10 +76,6 @@ class RetrofitRepository {
             ) {
                 if (response.isSuccessful()) {
                     val loginResponse: LoginResponse? = response.body()
-                    Log.d(
-                        "Response",
-                        String.valueOf(loginResponse?.data?.get(0)?.otp)
-                    )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
                     val gson = Gson()
@@ -214,10 +210,12 @@ class RetrofitRepository {
                     )
                     iapiCallback.onResponseSuccess(loginResponse)
                 } else {
-                    val loginResponse: RegisterResponse? = response.body()
-                    val addCustomerError = loginResponse?.error?.get(0)
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginResponse>() {}.type
+                    var errorResponse: LoginResponse? =
+                            gson.fromJson(response.errorBody()!!.charStream(), type)
                     Log.e("error ", response.errorBody().toString())
-                    iapiCallback.onResponseFailure(addCustomerError)
+                    iapiCallback.onResponseFailure(errorResponse?.error?.get(0))
                 }
             }
 

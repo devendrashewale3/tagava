@@ -43,7 +43,7 @@
                 android:numStars="5"
                 android:scaleX=".8"
                 android:scaleY=".8"
-                android:rating="@={viewmodelCustomerDashboard.ratingString}"
+                android:rating="@{viewmodelCustomerDashboard.ratingString}"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:theme="@style/RatingBar"

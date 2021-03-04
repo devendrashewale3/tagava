@@ -59,7 +59,6 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
 
                     response.let {
                         loginDataLiveData.value = true
-
                         isUserRegistered.value = false
 
                     }
@@ -192,6 +191,10 @@ class AuthViewModel(retrofitRepository: RetrofitRepository) : ViewModel() {
                 response.let {
 
                 businessIDDataLiveData.value = response?.data
+
+                    if (businessSelectedIDDataLiveData.value.isNullOrEmpty()) {
+                        businessSelectedIDDataLiveData.value = response?.data?.get(0)?.businessId
+                    }
                     businessDataFetchStatus.value = true
                 }
             }

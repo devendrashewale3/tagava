@@ -29,8 +29,8 @@ class DashboardViewModel (retrofitRepository: RetrofitRepository) : ViewModel() 
         this.retrofitRepository = retrofitRepository
         this.customerName = ObservableField("")
         this.mobileNumber = ObservableField("")
-        this.getAmount = ObservableField("")
-        this.giveAmount = ObservableField("")
+        this.getAmount = ObservableField("0")
+        this.giveAmount = ObservableField("0")
         this.sortByFilter = ObservableField("most_recent")
         this.progressDialog = SingleLiveEvent<Boolean>()
     }

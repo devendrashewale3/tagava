@@ -56,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:layout_toRightOf="@+id/initialsLayout"
-                android:text="Description" />
+                android:text="Description"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/amount"
